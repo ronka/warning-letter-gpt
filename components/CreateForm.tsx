@@ -22,8 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Link } from "lucide-react";
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
+import { Grid } from "./layout/Grid";
 
 const formSchema = z.object({
   topic: z.nativeEnum(Topic),
@@ -68,10 +68,12 @@ export function CreateForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>שם התובע</FormLabel>
-              <FormControl>
-                <Input placeholder="מה השם של דורש המכתב" {...field} />
-              </FormControl>
+              <Grid columns={2}>
+                <FormLabel>שם התובע</FormLabel>
+                <FormControl>
+                  <Input placeholder="מה השם של דורש המכתב" {...field} />
+                </FormControl>
+              </Grid>
               <FormMessage />
             </FormItem>
           )}
@@ -82,22 +84,27 @@ export function CreateForm() {
           name="topic"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>נושא מכתב ההתראה</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="תבחור את התחום" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value={Topic.DEFAMATION}>
-                    {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
-                  </SelectItem>
-                  <SelectItem value={Topic.FAKE_NEWS}>
-                    {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <Grid columns={2}>
+                <FormLabel>נושא מכתב ההתראה</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="תבחור את התחום" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value={Topic.DEFAMATION}>
+                      {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
+                    </SelectItem>
+                    <SelectItem value={Topic.FAKE_NEWS}>
+                      {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </Grid>
               {/* <FormDescription>
               </FormDescription> */}
               <FormMessage />
@@ -110,11 +117,15 @@ export function CreateForm() {
           name="against-name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>כנגד מי</FormLabel>
-              <FormControl>
-                <Input placeholder="כנגד מי" {...field} />
-              </FormControl>
-              <FormDescription>אל מי פונה מכתב התראה זה</FormDescription>
+              <Grid columns={2}>
+                <div>
+                  <FormLabel>כנגד מי</FormLabel>
+                  <FormDescription>אל מי פונה מכתב התראה זה</FormDescription>
+                </div>
+                <FormControl>
+                  <Input placeholder="כנגד מי" {...field} />
+                </FormControl>
+              </Grid>
               <FormMessage />
             </FormItem>
           )}
@@ -125,15 +136,19 @@ export function CreateForm() {
           name="body"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>מה התלונה?</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="נא לציין כמה שיותר מפרטי האירוע"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
+              <Grid columns={2}>
+                <div>
+                  <FormLabel>מה התלונה?</FormLabel>
+                  <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
+                </div>
+                <FormControl>
+                  <Textarea
+                    placeholder="נא לציין כמה שיותר מפרטי האירוע"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+              </Grid>
               <FormMessage />
             </FormItem>
           )}
@@ -143,18 +158,22 @@ export function CreateForm() {
           name="purpose"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>מה מנסים להשיג?</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="אני מעוניין שימחוק את הפוסט"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה ולא מכתב
-                סחיטה
-              </FormDescription>
+              <Grid columns={2}>
+                <div>
+                  <FormLabel>מה מנסים להשיג?</FormLabel>
+                  <FormDescription>
+                    ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה ולא
+                    מכתב סחיטה
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Textarea
+                    placeholder="אני מעוניין שימחוק את הפוסט"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+              </Grid>
               <FormMessage />
             </FormItem>
           )}
