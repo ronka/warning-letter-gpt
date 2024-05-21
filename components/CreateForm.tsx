@@ -26,6 +26,8 @@ import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
 import { Grid } from "./layout/Grid";
 
 const formSchema = z.object({
+  file:
+    typeof window === "undefined" ? z.any() : z.instanceof(FileList).optional(),
   topic: z.nativeEnum(Topic),
   "against-name": z.string().min(2, {
     message: "השם אמור להיות 2 תווים לפחות",
@@ -53,6 +55,8 @@ export function CreateForm() {
     },
   });
 
+  const fileRef = form.register("file");
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -68,7 +72,7 @@ export function CreateForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <Grid columns={2}>
+              <Grid>
                 <FormLabel>שם התובע</FormLabel>
                 <FormControl>
                   <Input placeholder="מה השם של דורש המכתב" {...field} />
@@ -84,7 +88,7 @@ export function CreateForm() {
           name="topic"
           render={({ field }) => (
             <FormItem>
-              <Grid columns={2}>
+              <Grid>
                 <FormLabel>נושא מכתב ההתראה</FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -117,7 +121,7 @@ export function CreateForm() {
           name="against-name"
           render={({ field }) => (
             <FormItem>
-              <Grid columns={2}>
+              <Grid>
                 <div>
                   <FormLabel>כנגד מי</FormLabel>
                   <FormDescription>אל מי פונה מכתב התראה זה</FormDescription>
@@ -136,7 +140,7 @@ export function CreateForm() {
           name="body"
           render={({ field }) => (
             <FormItem>
-              <Grid columns={2}>
+              <Grid>
                 <div>
                   <FormLabel>מה התלונה?</FormLabel>
                   <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
@@ -158,7 +162,7 @@ export function CreateForm() {
           name="purpose"
           render={({ field }) => (
             <FormItem>
-              <Grid columns={2}>
+              <Grid>
                 <div>
                   <FormLabel>מה מנסים להשיג?</FormLabel>
                   <FormDescription>
@@ -178,6 +182,35 @@ export function CreateForm() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="file"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <Grid>
+                  <div>
+                    <FormLabel>ראיות</FormLabel>
+                    <FormDescription>
+                      הוסיפו כמה שיותר צילומי מסך מהמקרה
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      multiple
+                      {...fileRef}
+                    />
+                  </FormControl>
+                </Grid>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+
         <Button type="submit">יצירת מכתב</Button>
       </form>
     </Form>
