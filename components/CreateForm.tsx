@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
 import { Grid } from "./layout/Grid";
-import { FileUpload } from "./FileUpload";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   file:
@@ -53,8 +53,11 @@ export function CreateForm() {
       body: "",
       purpose: "",
       name: "",
+      file: [],
     },
   });
+
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -62,6 +65,21 @@ export function CreateForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  const { onChange: fileFormRefOnChange, ...fileFormRef } =
+    form.register("file");
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    fileFormRefOnChange(e);
+
+    if (e.target.files) {
+      const imageArray = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+
+      setSelectedFiles(imageArray);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -182,7 +200,45 @@ export function CreateForm() {
           )}
         />
 
-        <FileUpload />
+        <FormField
+          control={form.control}
+          name="file"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <Grid>
+                  <div>
+                    <FormLabel>ראיות</FormLabel>
+                    <FormDescription>
+                      הוסיפו כמה שיותר צילומי מסך מהמקרה
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      multiple
+                      onChange={handleFileUpload}
+                      {...fileFormRef}
+                    />
+                  </FormControl>
+                </Grid>
+                <div>
+                  {selectedFiles.map((file: string, index: number) => (
+                    <div key={index} className="m-1 inline-block">
+                      <img
+                        src={file}
+                        alt={`uploaded-${index}`}
+                        className="w-32 h-32 object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
 
         <Button type="submit">יצירת מכתב</Button>
       </form>
