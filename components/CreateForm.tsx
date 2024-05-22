@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
 import { Grid } from "./layout/Grid";
+import { FileUpload } from "./FileUpload";
 
 const formSchema = z.object({
   file:
@@ -54,8 +55,6 @@ export function CreateForm() {
       name: "",
     },
   });
-
-  const fileRef = form.register("file");
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -183,33 +182,7 @@ export function CreateForm() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="file"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <Grid>
-                  <div>
-                    <FormLabel>ראיות</FormLabel>
-                    <FormDescription>
-                      הוסיפו כמה שיותר צילומי מסך מהמקרה
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/png, image/jpeg"
-                      multiple
-                      {...fileRef}
-                    />
-                  </FormControl>
-                </Grid>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
+        <FileUpload />
 
         <Button type="submit">יצירת מכתב</Button>
       </form>
