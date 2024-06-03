@@ -272,7 +272,20 @@ export function CreateForm() {
           </Step>
 
           <Step title="Step Title" description="Step Description">
-            <Button type="submit">יצירת מכתב</Button>
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-medium">Personal Information</h3>
+                <div className="text-gray-500 dark:text-gray-400">
+                  <p>Name: {form.getValues().name}</p>
+                  <p>Against Name: {form.getValues()["against-name"]}</p>
+                  <p>Body: {form.getValues().body}</p>
+                  <p>Purpose: {form.getValues().purpose}</p>
+                </div>
+              </div>
+              <form>
+                <Button type="submit">יצירת מכתב</Button>
+              </form>
+            </div>
           </Step>
         </MultiStepForm>
       </form>
