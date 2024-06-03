@@ -13,12 +13,12 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
     setCurrentStep((prev) => Math.min(prev + 1, children.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
-  const progress = Math.max((currentStep / (children.length - 1)) * 100, 1);
+  const progress = Math.max((currentStep / (children.length - 1)) * 100, 10);
 
   const currentChild = React.Children.toArray(children)[currentStep];
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-12 md:py-24">
+    <div dir="rtl" className="w-full max-w-3xl mx-auto py-12 md:py-24">
       <div className="flex items-center justify-center mb-8">
         <Progress value={progress} className="w-full" />
       </div>
@@ -32,14 +32,14 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
             onClick={prevStep}
             disabled={currentStep === 0}
           >
-            Previous
+            הקודם
           </Button>
           {currentStep < children.length - 1 && (
             <Button
               onClick={nextStep}
               disabled={currentStep === children.length - 1}
             >
-              {currentStep === children.length - 1 ? "Submit" : "Next"}
+              הבא
             </Button>
           )}
         </div>
