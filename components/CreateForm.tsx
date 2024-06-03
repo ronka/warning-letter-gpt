@@ -25,6 +25,8 @@ import {
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
 import { Grid } from "./layout/Grid";
 import { useEffect, useState } from "react";
+import { MultiStepForm } from "@/components/layout/MultiStepForm";
+import { Step } from "@/components/layout/Step";
 
 const formSchema = z.object({
   file:
@@ -84,163 +86,193 @@ export function CreateForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <Grid>
-                <FormLabel>שם התובע</FormLabel>
-                <FormControl>
-                  <Input placeholder="מה השם של דורש המכתב" {...field} />
-                </FormControl>
-              </Grid>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <MultiStepForm>
+          <Step
+            title="Personal Information"
+            description="Enter your personal details."
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <Grid>
+                    <FormLabel>שם התובע</FormLabel>
+                    <FormControl>
+                      <Input placeholder="מה השם של דורש המכתב" {...field} />
+                    </FormControl>
+                  </Grid>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Step>
 
-        <FormField
-          control={form.control}
-          name="topic"
-          render={({ field }) => (
-            <FormItem>
-              <Grid>
-                <FormLabel>נושא מכתב ההתראה</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="תבחור את התחום" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value={Topic.DEFAMATION}>
-                      {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
-                    </SelectItem>
-                    <SelectItem value={Topic.FAKE_NEWS}>
-                      {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </Grid>
-              {/* <FormDescription>
+          <Step
+            title="Personal Information"
+            description="Enter your personal details."
+          >
+            <FormField
+              control={form.control}
+              name="topic"
+              render={({ field }) => (
+                <FormItem>
+                  <Grid>
+                    <FormLabel>נושא מכתב ההתראה</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="תבחור את התחום" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={Topic.DEFAMATION}>
+                          {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
+                        </SelectItem>
+                        <SelectItem value={Topic.FAKE_NEWS}>
+                          {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Grid>
+                  {/* <FormDescription>
               </FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Step>
 
-        <FormField
-          control={form.control}
-          name="against-name"
-          render={({ field }) => (
-            <FormItem>
-              <Grid>
-                <div>
-                  <FormLabel>כנגד מי</FormLabel>
-                  <FormDescription>אל מי פונה מכתב התראה זה</FormDescription>
-                </div>
-                <FormControl>
-                  <Input placeholder="כנגד מי" {...field} />
-                </FormControl>
-              </Grid>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="body"
-          render={({ field }) => (
-            <FormItem>
-              <Grid>
-                <div>
-                  <FormLabel>מה התלונה?</FormLabel>
-                  <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
-                </div>
-                <FormControl>
-                  <Textarea
-                    placeholder="נא לציין כמה שיותר מפרטי האירוע"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-              </Grid>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="purpose"
-          render={({ field }) => (
-            <FormItem>
-              <Grid>
-                <div>
-                  <FormLabel>מה מנסים להשיג?</FormLabel>
-                  <FormDescription>
-                    ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה ולא
-                    מכתב סחיטה
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Textarea
-                    placeholder="אני מעוניין שימחוק את הפוסט"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-              </Grid>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="file"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <Grid>
-                  <div>
-                    <FormLabel>ראיות</FormLabel>
-                    <FormDescription>
-                      הוסיפו כמה שיותר צילומי מסך מהמקרה
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/png, image/jpeg"
-                      multiple
-                      onChange={handleFileUpload}
-                      {...fileFormRef}
-                    />
-                  </FormControl>
-                </Grid>
-                <div>
-                  {selectedFiles.map((file: string, index: number) => (
-                    <div key={index} className="m-1 inline-block">
-                      <img
-                        src={file}
-                        alt={`uploaded-${index}`}
-                        className="w-32 h-32 object-cover"
-                      />
+          <Step
+            title="Personal Information"
+            description="Enter your personal details."
+          >
+            <FormField
+              control={form.control}
+              name="against-name"
+              render={({ field }) => (
+                <FormItem>
+                  <Grid>
+                    <div>
+                      <FormLabel>כנגד מי</FormLabel>
+                      <FormDescription>
+                        אל מי פונה מכתב התראה זה
+                      </FormDescription>
                     </div>
-                  ))}
-                </div>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
+                    <FormControl>
+                      <Input placeholder="כנגד מי" {...field} />
+                    </FormControl>
+                  </Grid>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Step>
 
-        <Button type="submit">יצירת מכתב</Button>
+          <Step
+            title="Personal Information"
+            description="Enter your personal details."
+          >
+            <FormField
+              control={form.control}
+              name="body"
+              render={({ field }) => (
+                <FormItem>
+                  <Grid>
+                    <div>
+                      <FormLabel>מה התלונה?</FormLabel>
+                      <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
+                    </div>
+                    <FormControl>
+                      <Textarea
+                        placeholder="נא לציין כמה שיותר מפרטי האירוע"
+                        className="resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Step>
+
+          <Step
+            title="Personal Information"
+            description="Enter your personal details."
+          >
+            <FormField
+              control={form.control}
+              name="purpose"
+              render={({ field }) => (
+                <FormItem>
+                  <Grid>
+                    <div>
+                      <FormLabel>מה מנסים להשיג?</FormLabel>
+                      <FormDescription>
+                        ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה
+                        ולא מכתב סחיטה
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Textarea
+                        placeholder="אני מעוניין שימחוק את הפוסט"
+                        className="resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="file"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <Grid>
+                      <div>
+                        <FormLabel>ראיות</FormLabel>
+                        <FormDescription>
+                          הוסיפו כמה שיותר צילומי מסך מהמקרה
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          multiple
+                          onChange={handleFileUpload}
+                          {...fileFormRef}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <div>
+                      {selectedFiles.map((file: string, index: number) => (
+                        <div key={index} className="m-1 inline-block">
+                          <img
+                            src={file}
+                            alt={`uploaded-${index}`}
+                            className="w-32 h-32 object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </Step>
+
+          <Button type="submit">יצירת מכתב</Button>
+        </MultiStepForm>
       </form>
     </Form>
   );
