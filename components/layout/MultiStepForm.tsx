@@ -34,12 +34,14 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
           >
             Previous
           </Button>
-          <Button
-            onClick={nextStep}
-            disabled={currentStep === children.length - 1}
-          >
-            {currentStep === children.length - 1 ? "Submit" : "Next"}
-          </Button>
+          {currentStep < children.length - 1 && (
+            <Button
+              onClick={nextStep}
+              disabled={currentStep === children.length - 1}
+            >
+              {currentStep === children.length - 1 ? "Submit" : "Next"}
+            </Button>
+          )}
         </div>
       </div>
     </div>

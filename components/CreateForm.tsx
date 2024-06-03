@@ -271,7 +271,9 @@ export function CreateForm() {
             />
           </Step>
 
-          <Button type="submit">יצירת מכתב</Button>
+          <Step title="Step Title" description="Step Description">
+            <Button type="submit">יצירת מכתב</Button>
+          </Step>
         </MultiStepForm>
       </form>
     </Form>
