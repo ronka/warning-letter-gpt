@@ -46,6 +46,8 @@ const formSchema = z.object({
   }),
 });
 
+const Required = () => <span className="font-bold text-red-500">* </span>;
+
 export function CreateForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -100,7 +102,10 @@ export function CreateForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>שם מלא של מגיש המכתב:</FormLabel>
+                    <FormLabel>
+                      <Required />
+                      שם מלא של מגיש המכתב:
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -115,7 +120,10 @@ export function CreateForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div>
-                      <FormLabel>שם מלא אל מי ישלח המכתב:</FormLabel>
+                      <FormLabel>
+                        <Required />
+                        שם מלא אל מי ישלח המכתב:
+                      </FormLabel>
                     </div>
                     <FormControl>
                       <Input {...field} />
@@ -133,6 +141,7 @@ export function CreateForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
+                      <Required />
                       באיזה נושא אתם מעוניינים להתריע בפניו?
                     </FormLabel>
                     {/* <FormDescription>
@@ -169,7 +178,10 @@ export function CreateForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div>
-                      <FormLabel>מה התלונה?</FormLabel>
+                      <FormLabel>
+                        <Required />
+                        מה התלונה?
+                      </FormLabel>
                       <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
                     </div>
                     <FormControl>
@@ -189,7 +201,8 @@ export function CreateForm() {
                       <div>
                         <FormLabel>ראיות</FormLabel>
                         <FormDescription>
-                          הוסיפו כמה שיותר צילומי מסך מהמקרה
+                          הוסיפו כמה שיותר צילומי מסך מהמקרה, חשוב לשמור את
+                          הצילומי מסך
                         </FormDescription>
                       </div>
                       <FormControl>
@@ -226,7 +239,10 @@ export function CreateForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div>
-                      <FormLabel>מה מנסים להשיג?</FormLabel>
+                      <FormLabel>
+                        <Required />
+                        מה מנסים להשיג?
+                      </FormLabel>
                       <FormDescription>
                         ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה
                         ולא מכתב סחיטה
@@ -243,32 +259,34 @@ export function CreateForm() {
 
             <Step
               title="סיכום פרטי המכתב"
-              description="נא לוודא שהפרטים נכונים"
+              description="נא לוודא שהפרטים נכונים, במידה ויש שגיאה ניתן לחזור לשלב הקודם ולתקן אותם."
               isNextDisabled={false}
             >
               <div className="space-y-4">
                 <div>
                   <div className="text-gray-500 dark:text-gray-400">
-                    <p>
-                      <div className="font-black">שם מגיש המכתב:</div>{" "}
+                    <div className="mb-2">
+                      <div className="font-black">שם מגיש המכתב:</div>
                       {form.getValues().name}
-                    </p>
-                    <p>
+                    </div>
+                    <div className="mb-2">
                       <div className="font-black">המכתב מוגש כנד:</div>
                       {form.getValues()["against-name"]}
-                    </p>
-                    <p>
-                      <div className="font-black">הסיבה לשליחת המכתב:</div>{" "}
+                    </div>
+                    <div className="mb-2">
+                      <div className="font-black">הסיבה לשליחת המכתב:</div>
                       {form.getValues().body}
-                    </p>
-                    <p>
-                      <div className="font-black">אתם רוצים לבקש:</div>{" "}
+                    </div>
+                    <div className="mb-2">
+                      <div className="font-black">אתם רוצים לבקש:</div>
                       {form.getValues().purpose}
-                    </p>
+                    </div>
                   </div>
                 </div>
 
-                <Button type="submit">יצירת מכתב</Button>
+                <Button className="w-full" type="submit">
+                  יצירת מכתב
+                </Button>
               </div>
             </Step>
           </MultiStepForm>
