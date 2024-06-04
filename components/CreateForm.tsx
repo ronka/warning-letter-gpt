@@ -32,17 +32,17 @@ const formSchema = z.object({
   file:
     typeof window === "undefined" ? z.any() : z.instanceof(FileList).optional(),
   topic: z.nativeEnum(Topic),
-  "against-name": z.string().min(2, {
-    message: "השם אמור להיות 2 תווים לפחות",
+  "against-name": z.string().min(1, {
+    message: "השם אמור להיות 1 תווים לפחות",
   }),
-  body: z.string().min(2, {
-    message: "תוכן המקרה אמור להכיל לפחות 2 תווים",
+  body: z.string().min(1, {
+    message: "תוכן המקרה אמור להכיל לפחות 1 תווים",
   }),
-  purpose: z.string().min(2, {
-    message: "מטרת המכתב אמורה להכיל לפחות 2 תווים",
+  purpose: z.string().min(1, {
+    message: "מטרת המכתב אמורה להכיל לפחות 1 תווים",
   }),
-  name: z.string().min(2, {
-    message: "שם אמור להכיל לפחות 2 תווים",
+  name: z.string().min(1, {
+    message: "שם אמור להכיל לפחות 1 תווים",
   }),
 });
 
@@ -92,9 +92,7 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
-              isNextDisabled={
-                form.getFieldState("name", form.formState).invalid
-              }
+              isNextDisabled={!Boolean(form.watch("name"))}
             >
               <FormField
                 control={form.control}
@@ -115,9 +113,7 @@ export function CreateForm() {
 
             <Step
               title="Personal Information"
-              isNextDisabled={
-                form.getFieldState("topic", form.formState).invalid
-              }
+              isNextDisabled={!Boolean(form.watch("topic"))}
               description="Enter your personal details."
             >
               <FormField
@@ -157,9 +153,7 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
-              isNextDisabled={
-                form.getFieldState("against-name", form.formState).invalid
-              }
+              isNextDisabled={!Boolean(form.watch("against-name"))}
             >
               <FormField
                 control={form.control}
@@ -186,9 +180,7 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
-              isNextDisabled={
-                form.getFieldState("body", form.formState).invalid
-              }
+              isNextDisabled={!Boolean(form.watch("body"))}
             >
               <FormField
                 control={form.control}
@@ -219,9 +211,7 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
-              isNextDisabled={
-                form.getFieldState("purpose", form.formState).invalid
-              }
+              isNextDisabled={!Boolean(form.watch("purpose"))}
             >
               <FormField
                 control={form.control}
