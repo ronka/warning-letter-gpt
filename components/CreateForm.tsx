@@ -25,7 +25,7 @@ import {
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
 import { Grid } from "./layout/Grid";
 import { useState } from "react";
-import { MultiStepForm } from "@/components/layout/MultiStepForm";
+import { MultiStepForm, Required } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
 
 const formSchema = z.object({
@@ -45,8 +45,6 @@ const formSchema = z.object({
     message: "שם אמור להכיל לפחות 1 תווים",
   }),
 });
-
-const Required = () => <span className="font-bold text-red-500">* </span>;
 
 export function CreateForm() {
   // 1. Define your form.

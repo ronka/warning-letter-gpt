@@ -6,6 +6,8 @@ interface MultiStepFormProps {
   children: React.ReactElement[];
 }
 
+const Required = () => <span className="font-bold text-red-500">* </span>;
+
 const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -33,6 +35,9 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
         <div className="bg-white dark:bg-gray-950 rounded-lg shadow-lg">
           <div className="p-6 md:p-8">
             {React.cloneElement(currentChild as React.ReactElement)}
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              <Required /> הינו שדה חובה
+            </div>
           </div>
         </div>
       </div>
@@ -40,4 +45,4 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
   );
 };
 
-export { MultiStepForm };
+export { MultiStepForm, Required };
