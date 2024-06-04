@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
 import { Grid } from "./layout/Grid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MultiStepForm } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
 
@@ -92,6 +92,9 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
+              isNextDisabled={
+                form.getFieldState("name", form.formState).invalid
+              }
             >
               <FormField
                 control={form.control}
@@ -112,6 +115,9 @@ export function CreateForm() {
 
             <Step
               title="Personal Information"
+              isNextDisabled={
+                form.getFieldState("topic", form.formState).invalid
+              }
               description="Enter your personal details."
             >
               <FormField
@@ -151,6 +157,9 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
+              isNextDisabled={
+                form.getFieldState("against-name", form.formState).invalid
+              }
             >
               <FormField
                 control={form.control}
@@ -177,6 +186,9 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
+              isNextDisabled={
+                form.getFieldState("body", form.formState).invalid
+              }
             >
               <FormField
                 control={form.control}
@@ -207,6 +219,9 @@ export function CreateForm() {
             <Step
               title="Personal Information"
               description="Enter your personal details."
+              isNextDisabled={
+                form.getFieldState("purpose", form.formState).invalid
+              }
             >
               <FormField
                 control={form.control}
@@ -275,7 +290,11 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step title="Step Title" description="Step Description">
+            <Step
+              title="Step Title"
+              description="Step Description"
+              isNextDisabled={false}
+            >
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-medium">Personal Information</h3>
@@ -286,9 +305,8 @@ export function CreateForm() {
                     <p>Purpose: {form.getValues().purpose}</p>
                   </div>
                 </div>
-                <form>
-                  <Button type="submit">יצירת מכתב</Button>
-                </form>
+
+                <Button type="submit">יצירת מכתב</Button>
               </div>
             </Step>
           </MultiStepForm>
