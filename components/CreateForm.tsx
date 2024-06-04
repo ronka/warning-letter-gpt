@@ -90,150 +90,91 @@ export function CreateForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <MultiStepForm>
             <Step
-              title="Personal Information"
-              description="Enter your personal details."
-              isNextDisabled={!Boolean(form.watch("name"))}
+              isNextDisabled={
+                !Boolean(form.watch("name")) ||
+                !Boolean(form.watch("against-name"))
+              }
             >
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <Grid>
-                      <FormLabel>שם התובע</FormLabel>
-                      <FormControl>
-                        <Input placeholder="מה השם של דורש המכתב" {...field} />
-                      </FormControl>
-                    </Grid>
+                    <FormLabel>שם מלא של מגיש המכתב:</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </Step>
 
-            <Step
-              title="Personal Information"
-              isNextDisabled={!Boolean(form.watch("topic"))}
-              description="Enter your personal details."
-            >
-              <FormField
-                control={form.control}
-                name="topic"
-                render={({ field }) => (
-                  <FormItem>
-                    <Grid>
-                      <FormLabel>נושא מכתב ההתראה</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="תבחור את התחום" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value={Topic.DEFAMATION}>
-                            {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
-                          </SelectItem>
-                          <SelectItem value={Topic.FAKE_NEWS}>
-                            {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </Grid>
-                    {/* <FormDescription>
-              </FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </Step>
-
-            <Step
-              title="Personal Information"
-              description="Enter your personal details."
-              isNextDisabled={!Boolean(form.watch("against-name"))}
-            >
               <FormField
                 control={form.control}
                 name="against-name"
                 render={({ field }) => (
                   <FormItem>
-                    <Grid>
-                      <div>
-                        <FormLabel>כנגד מי</FormLabel>
-                        <FormDescription>
-                          אל מי פונה מכתב התראה זה
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Input placeholder="כנגד מי" {...field} />
-                      </FormControl>
-                    </Grid>
+                    <div>
+                      <FormLabel>שם מלא אל מי ישלח המכתב:</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </Step>
 
-            <Step
-              title="Personal Information"
-              description="Enter your personal details."
-              isNextDisabled={!Boolean(form.watch("body"))}
-            >
+            <Step isNextDisabled={!Boolean(form.watch("topic"))}>
+              <FormField
+                control={form.control}
+                name="topic"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      באיזה נושא אתם מעוניינים להתריע בפניו?
+                    </FormLabel>
+                    {/* <FormDescription>
+                      באיזה נושא אתם מעוניינים להתריע בפניו?
+                    </FormDescription> */}
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="בחר נושא" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={Topic.DEFAMATION}>
+                          {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
+                        </SelectItem>
+                        <SelectItem value={Topic.FAKE_NEWS}>
+                          {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </Step>
+
+            <Step isNextDisabled={!Boolean(form.watch("body"))}>
               <FormField
                 control={form.control}
                 name="body"
                 render={({ field }) => (
                   <FormItem>
-                    <Grid>
-                      <div>
-                        <FormLabel>מה התלונה?</FormLabel>
-                        <FormDescription>
-                          כמה שיותר מידע יותר טוב
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Textarea
-                          placeholder="נא לציין כמה שיותר מפרטי האירוע"
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </Step>
-
-            <Step
-              title="Personal Information"
-              description="Enter your personal details."
-              isNextDisabled={!Boolean(form.watch("purpose"))}
-            >
-              <FormField
-                control={form.control}
-                name="purpose"
-                render={({ field }) => (
-                  <FormItem>
-                    <Grid>
-                      <div>
-                        <FormLabel>מה מנסים להשיג?</FormLabel>
-                        <FormDescription>
-                          ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה
-                          ולא מכתב סחיטה
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Textarea
-                          placeholder="אני מעוניין שימחוק את הפוסט"
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                    </Grid>
+                    <div>
+                      <FormLabel>מה התלונה?</FormLabel>
+                      <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
+                    </div>
+                    <FormControl>
+                      <Textarea className="resize-none" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -245,23 +186,21 @@ export function CreateForm() {
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <Grid>
-                        <div>
-                          <FormLabel>ראיות</FormLabel>
-                          <FormDescription>
-                            הוסיפו כמה שיותר צילומי מסך מהמקרה
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Input
-                            type="file"
-                            accept="image/png, image/jpeg"
-                            multiple
-                            onChange={handleFileUpload}
-                            {...fileFormRef}
-                          />
-                        </FormControl>
-                      </Grid>
+                      <div>
+                        <FormLabel>ראיות</FormLabel>
+                        <FormDescription>
+                          הוסיפו כמה שיותר צילומי מסך מהמקרה
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          multiple
+                          onChange={handleFileUpload}
+                          {...fileFormRef}
+                        />
+                      </FormControl>
                       <div>
                         {selectedFiles.map((file: string, index: number) => (
                           <div key={index} className="m-1 inline-block">
@@ -280,19 +219,52 @@ export function CreateForm() {
               />
             </Step>
 
+            <Step isNextDisabled={!Boolean(form.watch("purpose"))}>
+              <FormField
+                control={form.control}
+                name="purpose"
+                render={({ field }) => (
+                  <FormItem>
+                    <div>
+                      <FormLabel>מה מנסים להשיג?</FormLabel>
+                      <FormDescription>
+                        ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה
+                        ולא מכתב סחיטה
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Textarea className="resize-none" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </Step>
+
             <Step
-              title="Step Title"
-              description="Step Description"
+              title="סיכום פרטי המכתב"
+              description="נא לוודא שהפרטים נכונים"
               isNextDisabled={false}
             >
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-medium">Personal Information</h3>
                   <div className="text-gray-500 dark:text-gray-400">
-                    <p>Name: {form.getValues().name}</p>
-                    <p>Against Name: {form.getValues()["against-name"]}</p>
-                    <p>Body: {form.getValues().body}</p>
-                    <p>Purpose: {form.getValues().purpose}</p>
+                    <p>
+                      <div className="font-black">שם מגיש המכתב:</div>{" "}
+                      {form.getValues().name}
+                    </p>
+                    <p>
+                      <div className="font-black">המכתב מוגש כנד:</div>
+                      {form.getValues()["against-name"]}
+                    </p>
+                    <p>
+                      <div className="font-black">הסיבה לשליחת המכתב:</div>{" "}
+                      {form.getValues().body}
+                    </p>
+                    <p>
+                      <div className="font-black">אתם רוצים לבקש:</div>{" "}
+                      {form.getValues().purpose}
+                    </p>
                   </div>
                 </div>
 

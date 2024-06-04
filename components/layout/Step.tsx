@@ -5,8 +5,8 @@ import { useStep } from "@/context/Step";
 
 interface StepProps {
   children: React.ReactNode;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   isNextDisabled: boolean;
 }
 
