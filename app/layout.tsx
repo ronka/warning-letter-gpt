@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { LetterProvider } from "@/context/Letter";
 import "./globals.css";
-import { DirectionProvider } from "@radix-ui/react-direction";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,8 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="rtl">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <LetterProvider>
+      <html lang="en" dir="rtl">
+        <body className={inter.className}>{children}</body>
+      </html>
+    </LetterProvider>
   );
 }

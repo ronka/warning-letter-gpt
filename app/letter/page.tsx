@@ -1,7 +1,21 @@
+"use client";
+
+import { useLetter } from "@/context/Letter";
 import { FileIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Letter() {
+  const router = useRouter();
+  const { letter } = useLetter();
+
+  if (!letter) {
+    router.push("/");
+    return null;
+  }
+
+  const { content, id } = letter;
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
@@ -10,12 +24,9 @@ export default function Letter() {
           <div className="absolute inset-0 backdrop-blur-md" />
           <div className="relative z-10 p-6">
             <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-              Acme Corporation Annual Report
+              מכתב: {id}
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              This is a preview of the Acme Corporation Annual Report. Some
-              content has been blurred for privacy reasons.
-            </p>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{content}</p>
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
                 <FileIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />

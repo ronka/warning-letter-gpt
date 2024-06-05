@@ -28,6 +28,8 @@ import { useState } from "react";
 import { MultiStepForm, Required } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
 import { generateAsync } from "@/services/api";
+import { useRouter } from "next/navigation";
+import { useLetter } from "@/context/Letter";
 
 const formSchema = z.object({
   file:
@@ -52,7 +54,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function CreateForm() {
-  // 1. Define your form.
+  const router = useRouter();
+  const { setLetter } = useLetter();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,13 +66,18 @@ export function CreateForm() {
       file: [],
     },
   });
-
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
   const onSubmit = async (values: FormData) => {
-    const response = await generateAsync(values);
+    try {
+      const response = await generateAsync(values);
 
-    console.log("response", response);
+      setLetter(response);
+
+      router.push("/letter");
+    } catch (error) {
+      console.error("Error sending request", error);
+    }
   };
 
   const { onChange: fileFormRefOnChange, ...fileFormRef } =
