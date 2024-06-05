@@ -27,10 +27,13 @@ import { Grid } from "./layout/Grid";
 import { useState } from "react";
 import { MultiStepForm, Required } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
+import { generateAsync } from "@/services/api";
 
 const formSchema = z.object({
   file:
-    typeof window === "undefined" ? z.any() : z.instanceof(FileList).optional(),
+    typeof window === "undefined"
+      ? z.any().optional()
+      : z.instanceof(FileList).optional(),
   topic: z.nativeEnum(Topic),
   "against-name": z.string().min(1, {
     message: "השם אמור להיות 1 תווים לפחות",
@@ -46,9 +49,11 @@ const formSchema = z.object({
   }),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 export function CreateForm() {
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       "against-name": "",
@@ -61,12 +66,11 @@ export function CreateForm() {
 
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: FormData) => {
+    const response = await generateAsync(values);
+
+    console.log("response", response);
+  };
 
   const { onChange: fileFormRefOnChange, ...fileFormRef } =
     form.register("file");
@@ -293,3 +297,6 @@ export function CreateForm() {
     </div>
   );
 }
+
+export { formSchema };
+export type { FormData };
