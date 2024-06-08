@@ -1,6 +1,11 @@
 import { type FormData } from "@/components/CreateForm";
 import axios from "axios";
 
+export interface GenerateResponse {
+  id: string;
+  content: string;
+}
+
 // Service function to send the request
 export const generateAsync = async (formData: FormData) => {
   try {
@@ -26,7 +31,7 @@ export const generateAsync = async (formData: FormData) => {
     });
 
     // Return the response data
-    return response.data;
+    return response.data as GenerateResponse;
   } catch (error) {
     // Handle and log errors
     console.error("Error sending request:", error);

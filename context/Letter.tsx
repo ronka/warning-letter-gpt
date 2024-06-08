@@ -1,33 +1,31 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
+import { generateAsync, type GenerateResponse } from "@/services/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-type Data = { content: string; id: string };
+export const useLetterMutation = () => {
+  const queryClient = useQueryClient();
 
-interface LetterContext {
-  letter: Data | null;
-  setLetter: (letter: Data) => void;
-}
-const LetterContext = createContext<LetterContext>({
-  letter: null,
-  setLetter: () => {},
-});
-
-export const LetterProvider: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
-}) => {
-  const [letter, setLetter] = useState<Data | null>(null);
-
-  return (
-    <LetterContext.Provider value={{ letter, setLetter }}>
-      {children}
-    </LetterContext.Provider>
-  );
+  return useMutation({
+    mutationFn: generateAsync,
+    onSuccess: (data) => {
+      // Optionally invalidate queries or update the cache with the new item
+      queryClient.invalidateQueries({ queryKey: ["letters"] });
+      queryClient.setQueryData(["generateLetter"], data);
+    },
+  });
 };
 
-export const useLetter = () => {
-  const context = useContext(LetterContext);
-  if (!context) {
-    throw new Error("useLetter must be used within a LetterProvider");
-  }
-  return context;
+export const useLetterQuery = () => {
+  const queryClient = useQueryClient();
+
+  const fetchLetters = async () => {
+    const data = queryClient.getQueryData(["generateLetter"]);
+    return data as GenerateResponse;
+  };
+
+  return useQuery({
+    queryKey: ["letters"],
+    queryFn: fetchLetters,
+    enabled: !!queryClient.getQueryData(["generateLetter"]),
+  });
 };

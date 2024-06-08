@@ -23,13 +23,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
-import { Grid } from "./layout/Grid";
 import { useState } from "react";
 import { MultiStepForm, Required } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
-import { generateAsync } from "@/services/api";
 import { useRouter } from "next/navigation";
-import { useLetter } from "@/context/Letter";
+import { useLetterMutation } from "@/context/Letter";
 
 const formSchema = z.object({
   file:
@@ -55,7 +53,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export function CreateForm() {
   const router = useRouter();
-  const { setLetter } = useLetter();
+  const { mutate } = useLetterMutation();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -70,9 +68,7 @@ export function CreateForm() {
 
   const onSubmit = async (values: FormData) => {
     try {
-      const response = await generateAsync(values);
-
-      setLetter(response);
+      await mutate(values);
 
       router.push("/letter");
     } catch (error) {
