@@ -18,7 +18,7 @@ export default function Letter() {
   }
 
   console.log("data", data);
-  console.log("isLoading", isLoading);
+  console.log("isLoading ", isLoading);
 
   if (isLoading || !data) {
     return (

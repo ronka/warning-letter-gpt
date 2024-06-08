@@ -1,9 +1,11 @@
 import { type FormData } from "@/components/CreateForm";
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
-import { generateObject } from "ai";
+import { ImagePart, generateObject } from "ai";
 import { TopicToDesciption } from "@/data/Topics";
 import { LetterResponseSchema } from "@/types/Letter";
+import fs from "fs/promises";
+import path from "path";
 
 const parseFormData = (formData: globalThis.FormData): FormData => {
   const data = {} as FormData;
@@ -23,11 +25,24 @@ const parseFormData = (formData: globalThis.FormData): FormData => {
   return data;
 };
 
+const filesToBuffers = async (files: File[]): Promise<ArrayBuffer[]> => {
+  return Promise.all(files.map((file) => file.arrayBuffer()));
+};
+
+const imagesToImageParts = (images: ArrayBuffer[]): ImagePart[] => {
+  return images.map((image) => ({
+    type: "image",
+    image: image,
+  }));
+};
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
     const data = parseFormData(formData);
+
+    const images = await filesToBuffers(data["file"] ?? []);
 
     const { object } = await generateObject({
       model: openai("gpt-4o"),
@@ -35,22 +50,49 @@ export async function POST(req: NextRequest) {
       system: `You are an attorney and you help your client to write a warning letter to do what ever the client request you to do.
 		You are a professional and you know how to write a warning letter, but the letter should sound like it was written by the client.
 		Refer to law only from what i provide you.
+		Dont put placeholders, if you dont have the data don't write it.
+		
 		the letter MUST be in hebrew`,
-      prompt: `Write a warning letter to ${
-        data["against-name"]
-      } in the name of the client, ${data["name"]}.
-	  the topic of the letter is: "${data["topic"]}".
-	  The reason for this warning letter from the client is:
-	  "${data["body"]}".
-	  The wanted outcome of the letter should be: "${data["purpose"]}".
-	  
-	 the law regreding this topic is:
-	 ${TopicToDesciption[data["topic"]].law}
-	 
-	 Here are examples for a warning letter:
-	 ${TopicToDesciption[data["topic"]].examples.join("\n")}
-	 `,
+      messages: [
+        {
+          role: "system",
+          content: `Write a warning letter to ${
+            data["against-name"]
+          } in the name of the client, ${data["name"]}.
+		  the topic of the letter is: "${data["topic"]}".
+		  The reason for this warning letter from the client is:
+		  "${data["body"]}".
+		  The wanted outcome of the letter should be: "${data["purpose"]}".
+		  
+		 the law regreding this topic is:
+		 ${TopicToDesciption[data["topic"]].law}
+		 
+		 Here are examples for a warning letter:
+		 ${TopicToDesciption[data["topic"]].examples.join("\n")}`,
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "here is a list of evidence that you can use:",
+            },
+            ...imagesToImageParts(images),
+          ],
+        },
+      ],
     });
+
+    console.log(
+      "file",
+      data["file"].map((file: Buffer) => ({
+        role: "user",
+        content: {
+          type: "image",
+          image: file,
+        },
+      }))
+    );
 
     // Return response
     return NextResponse.json({
@@ -59,7 +101,11 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     // Handle errors
+    console.log("#########");
+    console.log(" #####");
     console.error(error);
+    console.log(" #####");
+    console.log("#########");
     return NextResponse.json(
       { error: "Invalid request or server error" },
       { status: 400 }
