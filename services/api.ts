@@ -1,9 +1,10 @@
 import { type FormData } from "@/components/CreateForm";
+import { type LetterResponseType } from "@/types/Letter";
 import axios from "axios";
 
 export interface GenerateResponse {
   id: string;
-  content: string;
+  letter: LetterResponseType["letter"];
 }
 
 // Service function to send the request

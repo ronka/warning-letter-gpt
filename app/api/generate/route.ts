@@ -1,5 +1,9 @@
 import { type FormData } from "@/components/CreateForm";
 import { NextRequest, NextResponse } from "next/server";
+import { openai } from "@ai-sdk/openai";
+import { generateObject } from "ai";
+import { TopicToDesciption } from "@/data/Topics";
+import { LetterResponseSchema } from "@/types/Letter";
 
 const parseFormData = (formData: globalThis.FormData): FormData => {
   const data = {} as FormData;
@@ -25,25 +29,33 @@ export async function POST(req: NextRequest) {
 
     const data = parseFormData(formData);
 
+    const { object } = await generateObject({
+      model: openai("gpt-4o"),
+      schema: LetterResponseSchema,
+      system: `You are an attorney and you help your client to write a warning letter to do what ever the client request you to do.
+		You are a professional and you know how to write a warning letter, but the letter should sound like it was written by the client.
+		Refer to law only from what i provide you.
+		the letter MUST be in hebrew`,
+      prompt: `Write a warning letter to ${
+        data["against-name"]
+      } in the name of the client, ${data["name"]}.
+	  the topic of the letter is: "${data["topic"]}".
+	  The reason for this warning letter from the client is:
+	  "${data["body"]}".
+	  The wanted outcome of the letter should be: "${data["purpose"]}".
+	  
+	 the law regreding this topic is:
+	 ${TopicToDesciption[data["topic"]].law}
+	 
+	 Here are examples for a warning letter:
+	 ${TopicToDesciption[data["topic"]].examples.join("\n")}
+	 `,
+    });
+
     // Return response
     return NextResponse.json({
       id: "1",
-      content: `אורי ברוך הנכבד,
-
-	  הנדון: דרישה להסרת פוסט והתנצלות פומבית בגין לשון הרע
-	  
-	  בהתאם להוראות חוק איסור לשון הרע, תשכ"ה-1965, אני פונה אליך בדרישה להסרת הפוסט שפרסמת ביום [תאריך הפרסום] ברשת החברתית פייסבוק בקבוצת "פאודר", אשר בו ציינת את שמי, רון קנטור, והוצאת עלי שם רע עם מקרים לא נכונים ושקריים.
-	  
-	  הפוסט שפרסמת מהווה לשון הרע כמשמעותו בחוק, שכן הוא כולל פרטים אשר עלולים להשפיל אותי בעיני אחרים, לבזות אותי ולהזיק לשמי הטוב. פוסט זה גרם וגורם לי נזקים רבים הן מבחינה אישית והן מבחינה מקצועית.
-	  
-	  בשל הפרסום הנ"ל, אני דורש ממך לבצע את הפעולות הבאות באופן מיידי ולא יאוחר מ-7 ימים מיום קבלת מכתב זה:
-	  
-	  להסיר את הפוסט הפוגעני לאלתר.
-	  לפרסם הודעת הכחשה והתנצלות בפומבי באותה הרשת החברתית בה פורסם הפוסט המקורי, ולציין שהמידע שנכתב בפוסט אינו נכון ושגוי.
-	  להימנע מכל פרסום עתידי דומה שעלול לפגוע בשמי הטוב.
-	  במידה ולא תבצע את הפעולות הנדרשות לעיל, אשקול לנקוט נגדך בהליכים משפטיים בגין פרסום לשון הרע, אשר יכולים לכלול תביעה לפיצוי כספי ולסעדים נוספים כפי שיימצא לנכון.
-	  
-	  מכתב זה נשלח בתום לב ובמטרה למנוע הליכים משפטיים מיותרים. אני מקווה כי תבין את חומרת המצב ותפעל בהתאם לדרישותיי בהקדם האפשרי.`,
+      letter: object.letter,
     });
   } catch (error) {
     // Handle errors

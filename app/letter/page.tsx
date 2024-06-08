@@ -8,10 +8,9 @@ import { useRouter } from "next/navigation";
 
 export default function Letter() {
   const router = useRouter();
-  const { data, error, isError, isLoading, isFetched, isFetching } =
-    useLetterQuery();
+  const { data, error, isError, isLoading } = useLetterQuery();
 
-  if (isError || (!isFetching && !isFetched)) {
+  if (isError) {
     console.log(error);
     router.push("/");
 
@@ -26,7 +25,7 @@ export default function Letter() {
     );
   }
 
-  const { content, id } = data;
+  const { letter, id } = data;
 
   return (
     <div>
@@ -36,29 +35,10 @@ export default function Letter() {
         <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
           מכתב: {id}
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">{content}</p>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <FileIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
-            <span className="text-gray-600 dark:text-gray-400">
-              Acme_Annual_Report_2023.pdf
-            </span>
-          </div>
-          <Link
-            href="#"
-            className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-            prefetch={false}
-          >
-            View Full Report
-          </Link>
-        </div>
-      </div>
-      <div className="relative h-full">
-        <img
-          src="/placeholder.svg"
-          alt="Annual Report Preview"
-          className="w-full h-full object-cover object-center blur-md"
-        />
+
+        <p>לכבוד {letter["to"]}</p>
+        <h2>{letter["title"]}</h2>
+        <p>{letter["body"]}</p>
       </div>
     </div>
   );
