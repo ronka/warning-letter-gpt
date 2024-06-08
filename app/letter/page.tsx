@@ -17,6 +17,9 @@ export default function Letter() {
     return;
   }
 
+  console.log("data", data);
+  console.log("isLoading", isLoading);
+
   if (isLoading || !data) {
     return (
       <div>
@@ -36,9 +39,11 @@ export default function Letter() {
           מכתב: {id}
         </h1>
 
-        <p>לכבוד {letter["to"]}</p>
-        <h2>{letter["title"]}</h2>
-        <p>{letter["body"]}</p>
+        <div className="whitespace-pre-line">
+          <p>לכבוד {letter["to"]}</p>
+          <h2>{letter["title"]}</h2>
+          <p>{letter["body"]}</p>
+        </div>
       </div>
     </div>
   );
