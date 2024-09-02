@@ -37,7 +37,7 @@ const Step: React.FC<StepProps> = ({
         {currentStep < totalSteps - 1 && (
           <Button
             onClick={nextStep}
-            disabled={currentStep === totalSteps || isNextDisabled}
+            disabled={currentStep === totalSteps} // || isNextDisabled}
           >
             הבא
           </Button>
