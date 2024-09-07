@@ -1,13 +1,9 @@
 "use client";
 
-import { LetterContent } from "@/components/letter/content";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
 import { useLetterQuery } from "@/context/Letter";
-import { FileIcon } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Letter() {
