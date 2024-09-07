@@ -1,4 +1,4 @@
-import { type FormData } from "@/components/CreateForm";
+import { type FormData } from "@/components/home/CreateForm";
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
 import { ImagePart, generateObject } from "ai";
