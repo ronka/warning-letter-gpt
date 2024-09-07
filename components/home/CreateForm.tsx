@@ -28,6 +28,7 @@ import { MultiStepForm, Required } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
 import { useRouter } from "next/navigation";
 import { useLetterMutation } from "@/context/Letter";
+import { FormData } from "@/types/FormData";
 
 const formSchema = z.object({
   file:
@@ -48,8 +49,6 @@ const formSchema = z.object({
     message: "שם אמור להכיל לפחות 1 תווים",
   }),
 });
-
-type FormData = z.infer<typeof formSchema>;
 
 export function CreateForm() {
   const router = useRouter();
@@ -302,4 +301,3 @@ export function CreateForm() {
 }
 
 export { formSchema };
-export type { FormData };

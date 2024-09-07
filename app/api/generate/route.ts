@@ -1,11 +1,9 @@
-import { type FormData } from "@/components/home/CreateForm";
+import { FormData } from "@/types/FormData";
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
 import { ImagePart, generateObject } from "ai";
 import { TopicToDesciption } from "@/data/Topics";
 import { LetterResponseSchema } from "@/types/Letter";
-import fs from "fs/promises";
-import path from "path";
 
 const parseFormData = (formData: globalThis.FormData): FormData => {
   const data = {} as FormData;
