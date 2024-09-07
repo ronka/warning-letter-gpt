@@ -15,6 +15,7 @@ const Select = React.forwardRef<
     <SelectPrimitive.Root {...props} />
   </DirectionProvider>
 ));
+Select.displayName = SelectPrimitive.Root.displayName;
 
 const SelectGroup = SelectPrimitive.Group;
 
@@ -26,6 +27,7 @@ const SelectValue = React.forwardRef<
     <SelectPrimitive.Value ref={ref} {...props} />
   </DirectionProvider>
 ));
+SelectValue.displayName = SelectPrimitive.SelectValue.displayName;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
