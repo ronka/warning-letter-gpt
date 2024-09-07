@@ -1,4 +1,4 @@
-import { type FormData } from "@/components/CreateForm";
+import { type FormData } from "@/types/FormData";
 import { type LetterResponseType } from "@/types/Letter";
 import axios from "axios";
 
