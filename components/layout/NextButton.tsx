@@ -24,7 +24,7 @@ function NextButton({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Button
             onClick={nextStep}
             disabled={currentStep === totalSteps || isDisabled}
@@ -32,11 +32,11 @@ function NextButton({
             הבא
           </Button>
         </TooltipTrigger>
-        {isDisabled && (
-          <TooltipContent>
-            <p>יש למלא את כל השדות הנדרשים כדי להמשיך</p>
-          </TooltipContent>
-        )}
+        {/* {isDisabled && ( */}
+        <TooltipContent>
+          <p>יש למלא את כל השדות הנדרשים כדי להמשיך</p>
+        </TooltipContent>
+        {/* )} */}
       </Tooltip>
     </TooltipProvider>
   );

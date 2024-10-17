@@ -1,13 +1,8 @@
-import React from "react";
+"use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { useStep } from "@/context/Step";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { NextButton } from "./NextButton";
 
 interface StepProps {

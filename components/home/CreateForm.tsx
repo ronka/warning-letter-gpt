@@ -29,6 +29,7 @@ import { Step } from "@/components/layout/Step";
 import { useRouter } from "next/navigation";
 import { useLetterMutation } from "@/context/Letter";
 import { FormData } from "@/types/FormData";
+import { isStepValid } from "@/utils/formValidation";
 
 const formSchema = z.object({
   file:
@@ -95,15 +96,7 @@ export function CreateForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <MultiStepForm>
             <Step
-              isNextDisabled={() => {
-                const { errors } = form.formState;
-                return (
-                  !form.watch("name") ||
-                  !form.watch("against-name") ||
-                  !!errors.name ||
-                  !!errors["against-name"]
-                );
-              }}
+              isNextDisabled={() => isStepValid(form, ["name", "against-name"])}
             >
               <FormField
                 control={form.control}
@@ -142,12 +135,7 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step
-              isNextDisabled={() => {
-                const { errors } = form.formState;
-                return !form.watch("topic") || !!errors.topic;
-              }}
-            >
+            <Step isNextDisabled={() => isStepValid(form, ["topic"])}>
               <FormField
                 control={form.control}
                 name="topic"
@@ -184,12 +172,7 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step
-              isNextDisabled={() => {
-                const { errors } = form.formState;
-                return !form.watch("body") || !!errors.body;
-              }}
-            >
+            <Step isNextDisabled={() => isStepValid(form, ["body"])}>
               <FormField
                 control={form.control}
                 name="body"
@@ -250,12 +233,7 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step
-              isNextDisabled={() => {
-                const { errors } = form.formState;
-                return !form.watch("purpose") || !!errors.purpose;
-              }}
-            >
+            <Step isNextDisabled={() => isStepValid(form, ["purpose"])}>
               <FormField
                 control={form.control}
                 name="purpose"
