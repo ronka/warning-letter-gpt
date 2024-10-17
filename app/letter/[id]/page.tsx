@@ -5,16 +5,19 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLetterQuery } from "@/context/Letter";
 import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function Letter() {
   const router = useRouter();
-  const { data, error, isError, isLoading } = useLetterQuery();
+  const params = useParams();
+  const letterId = params.id as string;
+
+  const { data, error, isError, isLoading } = useLetterQuery(letterId);
 
   if (isError) {
-    console.log(error);
+    console.error(error);
     router.push("/");
-
-    return;
+    return null;
   }
 
   const visibleContent = data?.letter

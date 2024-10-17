@@ -53,7 +53,7 @@ const formSchema = z.object({
 
 export function CreateForm() {
   const router = useRouter();
-  const { mutate } = useLetterMutation();
+  const { mutateAsync: createLetter } = useLetterMutation();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,11 +67,11 @@ export function CreateForm() {
 
   const onSubmit = async (values: FormData) => {
     try {
-      await mutate(values);
-
-      router.push("/letter");
+      const newLetter = await createLetter(values);
+      router.push(`/letter/${newLetter.id}`);
     } catch (error) {
-      console.error("Error sending request", error);
+      console.error("Error creating letter", error);
+      // Handle error (e.g., show error message to user)
     }
   };
 
