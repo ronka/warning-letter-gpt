@@ -91,15 +91,19 @@ export function CreateForm() {
 
   return (
     <div className="max-w-[620px] w-full mx-auto">
-      {/* Existing code */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <MultiStepForm>
             <Step
-              isNextDisabled={
-                !Boolean(form.watch("name")) ||
-                !Boolean(form.watch("against-name"))
-              }
+              isNextDisabled={() => {
+                const { errors } = form.formState;
+                return (
+                  !form.watch("name") ||
+                  !form.watch("against-name") ||
+                  !!errors.name ||
+                  !!errors["against-name"]
+                );
+              }}
             >
               <FormField
                 control={form.control}
@@ -138,7 +142,12 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step isNextDisabled={!Boolean(form.watch("topic"))}>
+            <Step
+              isNextDisabled={() => {
+                const { errors } = form.formState;
+                return !form.watch("topic") || !!errors.topic;
+              }}
+            >
               <FormField
                 control={form.control}
                 name="topic"
@@ -175,7 +184,12 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step isNextDisabled={!Boolean(form.watch("body"))}>
+            <Step
+              isNextDisabled={() => {
+                const { errors } = form.formState;
+                return !form.watch("body") || !!errors.body;
+              }}
+            >
               <FormField
                 control={form.control}
                 name="body"
@@ -236,7 +250,12 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step isNextDisabled={!Boolean(form.watch("purpose"))}>
+            <Step
+              isNextDisabled={() => {
+                const { errors } = form.formState;
+                return !form.watch("purpose") || !!errors.purpose;
+              }}
+            >
               <FormField
                 control={form.control}
                 name="purpose"
