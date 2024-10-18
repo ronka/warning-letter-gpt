@@ -20,11 +20,8 @@ export default function Letter() {
     return null;
   }
 
-  const visibleContent = data?.letter
-    ? `לכבוד ${data.letter.to}\n\n${data.letter.title}\n\n${data.letter.body
-        .split("\n")
-        .slice(0, 6)
-        .join("\n")}`
+  const visibleContent = data
+    ? `לכבוד ${data.to}\n\n${data.title}\n\n${data.body}`
     : "";
 
   const handleDownload = () => {
@@ -48,13 +45,6 @@ export default function Letter() {
           ) : (
             <>
               <div className="p-6 relative font-serif text-lg leading-relaxed whitespace-pre-wrap">
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white to-transparent"
-                  aria-hidden="true"
-                />
-                <div className="absolute bottom-0 left-0 right-0 h-12 flex items-center justify-center text-sm">
-                  Preview truncated. Download to read full letter.
-                </div>
                 {visibleContent}
               </div>
             </>
