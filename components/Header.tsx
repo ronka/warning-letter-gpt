@@ -1,4 +1,4 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import Link from "next/link";
 
@@ -18,10 +18,14 @@ const Header = () => {
             </li>
             <li>
               <SignedOut>
-                <SignInButton />
+                <Link href="/sign-in" className="hover:underline">
+                  התחברות
+                </Link>
               </SignedOut>
               <SignedIn>
-                <UserButton />
+                <SignOutButton>
+                  <button className="hover:underline">התנתקות</button>
+                </SignOutButton>
               </SignedIn>
             </li>
           </ul>
