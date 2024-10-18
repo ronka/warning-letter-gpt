@@ -1,6 +1,11 @@
 "use client";
-import { generateAsync, type GenerateResponse } from "@/services/api";
+import {
+  fetchLetter,
+  generateAsync,
+  type GenerateResponse,
+} from "@/services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 // Toggle this to switch between mock and real API
 const USE_MOCK_API = false;
@@ -16,7 +21,7 @@ const mockGenerateAsync = async (formData: any): Promise<GenerateResponse> => {
     user_id: "1",
     to: formData["against-name"],
     title: `התרעה בנושא ${formData.topic}`,
-    body: 'אורי כהן הנכבד,\n\nהנדון: דרישה להסרת פוסט בגין לשון הרע\n\nבהתאם להוראות חוק איסור לשון הרע, תשכ"ה-1965, אני פונה אליך בדרישה להסרת הפוסט שפרסמת, שבו הכפשת את שמי באופן פומבי ביני לבין אחרים. הפוסט מהווה הוצאת דיבה, כמשמעותו בחוק, וכולל פרטים שקריים ופוגעניים אשר עלולים להשפיל אותי ולהזיק לשמי הטוב. לפרסום זה ישנן השלכות חמורות על המוניטין האישי והמקצועי שלי.\n\nבמקרה המצורף, מדובר בפוסט שפרסמת הנושא את שמי, ובו הצגת פרטים לא נכונים ושקריים בקשר לעבודתי וכישורי המקצועיים. פרסום זה עלול להשפיע לרעה על תפקידי ועל היחס המקצועי כלפיי מצד קולגות ואנשי מקצוע בתחום. \n\nבשל הפרסום הנ"ל, אני דורש ממך לבצע את הפעולות הבאות באופן מיידי ולא יאוחר מ-7 ימים מיום קבלת מכתב זה:\n\n1. להסיר את הפוסט המכפיש לאלתר.\n2. להתנצל בפומבי באותה רשת חברתית בה פורסם הפוסט המקורי, ולציין שהמידע שנכתב בפוסט אינו נכון ושגוי.\n3. להימנע מכל פרסום עתידי דומה שעלול לפגוע בשמי הטוב.\n\nבמידה ולא תבצע את הפעולות הנדרשות לעיל, אשקול לנקוט נגדך בהליכים משפטיים בגין פרסום לשון הרע, אשר יכולים לכלול תביעה לפיצוי כספי ולסעדים נוספים כפי שיימצא לנכון.\n\nמכתב זה נשלח בתום לב ובמטרה למנוע הליכים משפטיים מיותרים. אני מקווה כי תבין את חומרת המצב ותפעל בהתאם לדרישותייי בהקדם האפשרי.\n\nבכבוד רב,\n\nרון קנטור',
+    body: 'אורי כהן הנכבד,\n\nהנדון: דרישה להסרת פוסט בגין לשון הרע\n\nבהתאם להוראות חוק איסור לשון הרע, תשכ"ה-1965, אני פונה אליך בדרישה להסרת הפוסט שפרסמת, שבו הכפשת את שמי באופן פומבי ביני לבין אחרים. הפוסט מהווה הוצאת דיבה, כמשמעותו בחוק, וכולל פרטים שקריים ופוגעניים אשר עלולים להשפיל אותי ולהזיק לשמי הטוב. לפרסום זה ישנן השלכות חמורות על המוניטין האישי והמקצועי שלי.\n\nבמקרה המצורף, מדובר בפוסט שפרסמת הנושא את שמי, ובו הצגת פרטים לא נכונים ושקריים בקשר לעבודתי וכישורי המקצועיים. פרסום זה ע��ול להשפיע לרעה על תפקידי ועל היחס המקצועי כלפיי מצד קולגות ואנשי מקצוע בתחום. \n\nבשל הפרסום הנ"ל, אני דורש ממך לבצע את הפעולות הבאות באופן מיידי ולא יאוחר מ-7 ימים מיום קבלת מכתב זה:\n\n1. להסיר את הפוסט המכפיש לאלתר.\n2. להתנצל בפומבי באותה רשת חברתית בה פורסם הפוסט המקורי, ולציין שהמידע שנכתב בפוסט אינו נכון ושגוי.\n3. להימנע מכל פרסום עתידי דומה שעלול לפגוע בשמי הטוב.\n\nבמידה ולא תבצע את הפעולות הנדרשות לעיל, אשקול לנקוט נגדך בהליכים משפטיים בגין פרסום לשון הרע, אשר יכולים לכלול תביעה לפיצוי כספי ולסעדים נוספים כפי שיימצא לנכון.\n\nמכתב זה נשלח בתום לב ובמטרה למנוע הליכים משפטיים מיותרים. אני מקווה כי תבין את חומרת המצב ותפעל בהתאם לדרישותייי בהקדם האפשרי.\n\nבכבוד רב,\n\nרון קנטור',
     wantedOutcome: formData.purpose,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -46,21 +51,11 @@ export const useLetterMutation = () => {
 };
 
 export const useLetterQuery = (id: string) => {
-  const queryClient = useQueryClient();
-
   return useQuery({
     queryKey: ["letter", id],
     queryFn: () => (USE_MOCK_API ? mockFetchLetter(id) : fetchLetter(id)),
     enabled: !!id,
-    initialData: () =>
-      queryClient.getQueryData<GenerateResponse>(["letter", id]),
-    refetchOnMount: false, // Don't refetch on component mount
-    refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
-};
-
-const fetchLetter = async (id: string): Promise<GenerateResponse> => {
-  // Implement the actual API call to fetch a specific letter by ID
-  // This function should be implemented when you're ready to connect to a real API
-  throw new Error("Real API not implemented yet");
 };

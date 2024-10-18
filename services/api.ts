@@ -36,3 +36,19 @@ export const generateAsync = async (formData: FormData) => {
     throw error;
   }
 };
+
+export const fetchLetter = async (id: string): Promise<GenerateResponse> => {
+  try {
+    const response = await axios.get(`/api/letters/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 403) {
+        throw new Error("Access denied");
+      } else if (error.response.status === 404) {
+        throw new Error("Letter not found");
+      }
+    }
+    throw new Error("Error fetching letter");
+  }
+};
