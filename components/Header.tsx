@@ -17,6 +17,11 @@ const Header = () => {
               </Link>
             </li>
             <li>
+              <Link href="/letter" className="hover:underline">
+                מכתבים
+              </Link>
+            </li>
+            <li>
               <SignedOut>
                 <Link href="/sign-in" className="hover:underline">
                   התחברות

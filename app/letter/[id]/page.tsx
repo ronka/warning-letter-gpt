@@ -6,13 +6,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useLetterQuery } from "@/context/Letter";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import LetterSkeleton from "@/components/LetterSkeleton";
 
-export default function Letter() {
+export default function LetterDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
-  const params = useParams();
-  const letterId = params.id as string;
-
-  const { data, error, isError, isLoading } = useLetterQuery(letterId);
+  const { id } = params;
+  const { data, error, isError, isLoading } = useLetterQuery(id);
 
   if (isError) {
     console.error(error);
@@ -31,23 +34,15 @@ export default function Letter() {
   return (
     <section className="py-12">
       <div className="container mx-auto px-4 max-w-lg">
-        <h2 className="text-2xl font-bold mb-4">Letter Preview</h2>
         <Card className="mb-4 relative overflow-hidden">
           {isLoading ? (
             <div className="p-6 space-y-4">
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-4/5" />
-              <Skeleton className="h-4 w-3/4" />
+              <LetterSkeleton />
             </div>
           ) : (
-            <>
-              <div className="p-6 relative font-serif text-lg leading-relaxed whitespace-pre-wrap">
-                {visibleContent}
-              </div>
-            </>
+            <div className="p-6 relative font-serif text-lg leading-relaxed whitespace-pre-wrap">
+              {visibleContent}
+            </div>
           )}
         </Card>
         <Button

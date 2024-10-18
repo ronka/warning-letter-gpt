@@ -52,3 +52,13 @@ export const fetchLetter = async (id: string): Promise<GenerateResponse> => {
     throw new Error("Error fetching letter");
   }
 };
+
+export const fetchUserLetters = async (): Promise<Letter[]> => {
+  try {
+    const response = await axios.get("/api/letters");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user letters:", error);
+    throw new Error("Failed to fetch user letters");
+  }
+};
