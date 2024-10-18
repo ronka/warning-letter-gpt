@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.24",
+    "@clerk/nextjs": "^5.7.5",
+    "@clerk/themes": "^2.1.37",
     "@hookform/resolvers": "^3.4.0",
     "@radix-ui/react-direction": "^1.0.1",
     "@radix-ui/react-label": "^2.0.2",
@@ -23,6 +25,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "fs": "^0.0.1-security",
+    "install": "^0.13.0",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
     "promises": "^0.2.5",

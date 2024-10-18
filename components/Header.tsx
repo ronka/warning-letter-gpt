@@ -1,3 +1,5 @@
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
 import Link from "next/link";
 
 const Header = () => {
@@ -8,11 +10,19 @@ const Header = () => {
           התראהGPT
         </Link>
         <nav>
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-4 gap-4">
             <li>
               <Link href="/" className="hover:underline">
                 בית
               </Link>
+            </li>
+            <li>
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
             </li>
           </ul>
         </nav>
