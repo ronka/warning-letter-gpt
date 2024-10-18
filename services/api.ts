@@ -1,11 +1,8 @@
 import { type FormData } from "@/types/FormData";
-import { type LetterResponseType } from "@/types/Letter";
+import { type Letter } from "@/db/schema";
 import axios from "axios";
 
-export interface GenerateResponse {
-  id: string;
-  letter: LetterResponseType["letter"];
-}
+export type GenerateResponse = Letter;
 
 // Service function to send the request
 export const generateAsync = async (formData: FormData) => {

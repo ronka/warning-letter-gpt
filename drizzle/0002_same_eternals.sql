@@ -1,0 +1,1 @@
+ALTER TABLE "letters" RENAME COLUMN "User Id" TO "user_id";

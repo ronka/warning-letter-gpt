@@ -3,7 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
 import { ImagePart, generateObject } from "ai";
 import { TopicToDesciption } from "@/data/Topics";
-import { LetterResponseSchema } from "@/types/Letter";
+import { LetterInputSchema, LetterInput } from "@/types/Letter";
+import { db } from "@/db";
+import { letters } from "@/db/schema";
+import { auth } from "@clerk/nextjs/server";
 
 const parseFormData = (formData: globalThis.FormData): FormData => {
   const data = {} as FormData;
@@ -36,15 +39,19 @@ const imagesToImageParts = (images: ArrayBuffer[]): ImagePart[] => {
 
 export async function POST(req: NextRequest) {
   try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await req.formData();
-
     const data = parseFormData(formData);
-
     const images = await filesToBuffers(data["file"] ?? []);
 
     const { object } = await generateObject({
       model: openai("gpt-4o"),
-      schema: LetterResponseSchema,
+      schema: LetterInputSchema,
       system: `You are an attorney and you help your client to write a warning letter to do what ever the client request you to do.
 		You are a professional and you know how to write a warning letter, but the letter should sound like it was written by the client.
 		Refer to law only from what i provide you.
@@ -81,29 +88,25 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    console.log(
-      "file",
-      data["file"].map((file: Buffer) => ({
-        role: "user",
-        content: {
-          type: "image",
-          image: file,
-        },
-      }))
-    );
+    // Insert the generated letter into the database
+    const newLetter: LetterInput = {
+      to: data["against-name"],
+      title: object.title,
+      body: object.body,
+      wantedOutcome: object.wantedOutcome,
+      user_id: userId,
+    };
+
+    const [insertedLetter] = await db
+      .insert(letters)
+      .values(newLetter)
+      .returning();
 
     // Return response
-    return NextResponse.json({
-      id: "1",
-      letter: object.letter,
-    });
+    return NextResponse.json(insertedLetter);
   } catch (error) {
     // Handle errors
-    console.log("#########");
-    console.log(" #####");
-    console.error(error);
-    console.log(" #####");
-    console.log("#########");
+    console.error("Error generating letter:", error);
     return NextResponse.json(
       { error: "Invalid request or server error" },
       { status: 400 }
