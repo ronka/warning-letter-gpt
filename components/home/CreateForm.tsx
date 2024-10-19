@@ -30,6 +30,8 @@ import { useRouter } from "next/navigation";
 import { useLetterMutation } from "@/context/Letter";
 import { FormData } from "@/types/FormData";
 import { isStepValid } from "@/utils/formValidation";
+import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   file:
@@ -53,7 +55,9 @@ const formSchema = z.object({
 
 export function CreateForm() {
   const router = useRouter();
-  const { mutateAsync: createLetter } = useLetterMutation();
+  const { mutateAsync: createLetter, isPending: isLoading } =
+    useLetterMutation();
+  const { toast } = useToast();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,7 +75,11 @@ export function CreateForm() {
       router.push(`/letter/${newLetter.id}`);
     } catch (error) {
       console.error("Error creating letter", error);
-      // Handle error (e.g., show error message to user)
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה ביצירת המכתב. אנא נסה שוב.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -285,8 +293,15 @@ export function CreateForm() {
                   </div>
                 </div>
 
-                <Button className="w-full" type="submit">
-                  יצירת מכתב
+                <Button className="w-full" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      יוצר מכתב... זה עלול לקחת מספר רגעים
+                    </>
+                  ) : (
+                    "יצירת מכתב"
+                  )}
                 </Button>
               </div>
             </Step>
