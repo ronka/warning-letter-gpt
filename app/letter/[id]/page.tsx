@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,9 +9,11 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { useLetterQuery } from "@/context/Letter";
+import { useLetterQuery, useUpdateLetter } from "@/context/Letter";
 import { useRouter } from "next/navigation";
 import LetterSkeleton from "@/components/LetterSkeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LetterDetailPage({
   params,
@@ -20,6 +23,9 @@ export default function LetterDetailPage({
   const router = useRouter();
   const { id } = params;
   const { data, error, isError, isLoading } = useLetterQuery(id);
+  const { mutate: updateLetter, isPending: isUpdating } = useUpdateLetter(id);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState("");
 
   if (isError) {
     console.error(error);
@@ -33,6 +39,33 @@ export default function LetterDetailPage({
 
   const handleDownload = () => {
     // Implement download functionality here
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setEditedContent(visibleContent);
+  };
+
+  const handleSaveClick = async () => {
+    if (!data) return;
+
+    // Split the edited content to update the letter data
+    const [to, ...rest] = editedContent.split("\n\n");
+    const [title, ...bodyParts] = rest;
+    const body = bodyParts.join("\n\n");
+
+    try {
+      await updateLetter({
+        ...data,
+        to: to.replace("לכבוד ", ""),
+        title,
+        body,
+      });
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to save changes:", error);
+      // Implement error handling (e.g., show an error toast)
+    }
   };
 
   return (
@@ -52,20 +85,36 @@ export default function LetterDetailPage({
                 <LetterSkeleton />
                 <LetterSkeleton />
               </div>
+            ) : isEditing ? (
+              <Textarea
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                className="w-full h-[400px] p-6 text-lg leading-relaxed"
+              />
             ) : (
-              <div className="p-6 relative  text-lg leading-relaxed whitespace-pre-wrap">
+              <div className="p-6 relative text-lg leading-relaxed whitespace-pre-wrap">
                 {visibleContent}
               </div>
             )}
           </CardContent>
           <CardFooter className="flex justify-center gap-4">
-            <Button
-              variant="outline"
-              onClick={() => router.push(`/letter/${id}/edit`)}
-            >
-              🖊️ עריכה
-            </Button>
-            <Button onClick={handleDownload} disabled={isLoading}>
+            {isEditing ? (
+              <Button
+                onClick={handleSaveClick}
+                disabled={isLoading || isUpdating}
+              >
+                💾 {isUpdating ? <Spinner /> : "שמור"}
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={handleEditClick}
+                disabled={isLoading}
+              >
+                🖊️ עריכה
+              </Button>
+            )}
+            <Button onClick={handleDownload} disabled={isLoading || isEditing}>
               ↓ {isLoading ? "טוען..." : "להורדה"}
             </Button>
           </CardFooter>

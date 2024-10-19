@@ -7,6 +7,7 @@ import {
 } from "@/services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import axios from "axios";
 
 // Toggle this to switch between mock and real API
 const USE_MOCK_API = false;
@@ -59,6 +60,20 @@ export const useLetterQuery = (id: string) => {
     enabled: !!id,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useUpdateLetter = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (updatedLetter: Partial<GenerateResponse>) => {
+      const response = await axios.put(`/api/letters/${id}`, updatedLetter);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["letter", id], data);
+    },
   });
 };
 
