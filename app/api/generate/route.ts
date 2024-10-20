@@ -5,8 +5,9 @@ import { ImagePart, generateObject } from "ai";
 import { TopicToDesciption } from "@/data/Topics";
 import { LetterInputSchema, LetterInput } from "@/types/Letter";
 import { db } from "@/db";
-import { letters } from "@/db/schema";
+import { letters, userCredits } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
+import { eq } from "drizzle-orm";
 
 const parseFormData = (formData: globalThis.FormData): FormData => {
   const data = {} as FormData;
@@ -43,6 +44,19 @@ export async function POST(req: NextRequest) {
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check user credits
+    const [userCredit] = await db
+      .select()
+      .from(userCredits)
+      .where(eq(userCredits.user_id, userId));
+
+    if (!userCredit || userCredit.credits_left < 1) {
+      return NextResponse.json(
+        { error: "Insufficient credits" },
+        { status: 403 }
+      );
     }
 
     const formData = await req.formData();
@@ -97,10 +111,20 @@ export async function POST(req: NextRequest) {
       user_id: userId,
     };
 
-    const [insertedLetter] = await db
-      .insert(letters)
-      .values(newLetter)
-      .returning();
+    // Use a transaction to ensure both operations succeed or fail together
+    const [insertedLetter] = await db.transaction(async (tx) => {
+      const [letter] = await tx.insert(letters).values(newLetter).returning();
+
+      await tx
+        .update(userCredits)
+        .set({
+          credits_left: userCredit.credits_left - 1,
+          last_usage: new Date(),
+        })
+        .where(eq(userCredits.user_id, userId));
+
+      return [letter];
+    });
 
     // Return response
     return NextResponse.json(insertedLetter);

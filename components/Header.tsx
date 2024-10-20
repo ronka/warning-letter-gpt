@@ -1,6 +1,6 @@
 import { SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
-
 import Link from "next/link";
+import { Credits } from "./header/credits";
 
 const Header = () => {
   return (
@@ -10,7 +10,7 @@ const Header = () => {
           התראהGPT
         </Link>
         <nav>
-          <ul className="flex space-x-4 gap-4">
+          <ul className="flex space-x-4 gap-4 items-center">
             <li>
               <Link href="/" className="hover:underline">
                 בית
@@ -21,6 +21,9 @@ const Header = () => {
                 מכתבים
               </Link>
             </li>
+            <SignedIn>
+              <Credits />
+            </SignedIn>
             <li>
               <SignedOut>
                 <Link href="/sign-in" className="hover:underline">
