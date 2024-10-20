@@ -18,10 +18,20 @@ export async function GET(req: NextRequest) {
       .where(eq(userCredits.user_id, userId));
 
     if (!userCredit) {
-      return NextResponse.json(
-        { error: "User credits not found" },
-        { status: 404 }
-      );
+      // If no user credit record is found, create a new one with zero credits
+      const newUserCredit = await db
+        .insert(userCredits)
+        .values({
+          user_id: userId,
+          credits_left: 0,
+          last_usage: new Date(),
+        })
+        .returning();
+
+      return NextResponse.json({
+        credits_left: 0,
+        last_usage: newUserCredit[0].last_usage,
+      });
     }
 
     return NextResponse.json({
@@ -29,7 +39,7 @@ export async function GET(req: NextRequest) {
       last_usage: userCredit.last_usage,
     });
   } catch (error) {
-    console.error("Error fetching user credits:", error);
+    console.error("Error fetching or creating user credits:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
