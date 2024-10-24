@@ -45,7 +45,7 @@ export function PricingTable() {
               </div>
               <p className="mb-4">תשלום חד פעמי. ללא מנוי</p>
             </div>
-            <BuyButton />
+            <BuyButton productType="5-credits" />
           </div>
 
           <div className="flex flex-col justify-between relative rounded-2xl p-8 -m-8 border-2 shadow-xl  text-center  border-orange-500 bg-white">
@@ -61,7 +61,7 @@ export function PricingTable() {
               </div>
               <p className="mb-4">תשלום חד פעמי. ללא מנוי</p>
             </div>
-            <BuyButton />
+            <BuyButton productType="20-credits" />
           </div>
         </div>
       </div>
