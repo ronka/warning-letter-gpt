@@ -17,7 +17,12 @@ const NavItems = ({ onClick }: { onClick?: () => void }) => (
     </li>
     <li>
       <Link href="/letter" className="hover:underline" onClick={onClick}>
-        מכתבים
+        צור מכתב
+      </Link>
+    </li>
+    <li>
+      <Link href="/letters" className="hover:underline" onClick={onClick}>
+        המכתבים שיצרת
       </Link>
     </li>
     <SignedIn>

@@ -3,9 +3,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <main className="flex-grow">
-      <div className="container mx-auto py-10">{children}</div>
-    </main>
-  );
+  return <main className="container mx-auto py-10">{children}</main>;
 }
