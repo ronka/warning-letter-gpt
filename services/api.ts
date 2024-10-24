@@ -14,10 +14,10 @@ export const generateAsync = async (formData: FormData) => {
 
       if (formData[parsedKey] instanceof FileList) {
         Array.from(formData[parsedKey]).forEach((file) => {
-          data.append(`${parsedKey}[]`, file as Blob);
+          data.append(`${String(parsedKey)}[]`, file as Blob);
         });
       } else {
-        data.append(parsedKey, formData[parsedKey]);
+        data.append(String(parsedKey), formData[parsedKey]);
       }
     });
 

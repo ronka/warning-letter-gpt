@@ -63,6 +63,8 @@ export async function POST(req: NextRequest) {
     const data = parseFormData(formData);
     const images = await filesToBuffers(data["file"] ?? []);
 
+    const topic = data["topic"] as keyof typeof TopicToDesciption;
+
     const { object } = await generateObject({
       model: openai("gpt-4o"),
       schema: LetterInputSchema,
@@ -84,10 +86,10 @@ export async function POST(req: NextRequest) {
 		  The wanted outcome of the letter should be: "${data["purpose"]}".
 		  
 		 the law regreding this topic is:
-		 ${TopicToDesciption[data["topic"]].law}
+		 ${TopicToDesciption[topic].law}
 		 
 		 Here are examples for a warning letter:
-		 ${TopicToDesciption[data["topic"]].examples.join("\n")}`,
+		 ${TopicToDesciption[topic].examples.join("\n")}`,
         },
         {
           role: "user",
