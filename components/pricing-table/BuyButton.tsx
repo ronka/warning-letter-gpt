@@ -3,6 +3,8 @@
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Script from "next/script";
+import { useEffect } from "react";
 
 type BuyButtonProps = {
   productType: "5-credits" | "20-credits";
@@ -18,16 +20,35 @@ const productLinks: Record<BuyButtonProps["productType"], string> = {
 const BuyButton = ({ productType }: BuyButtonProps) => {
   const { user } = useUser();
   const userId = user?.id;
-  const buyLink = `${productLinks[productType]}?checkout[custom][user_id]=${
+  const buyLink = `${
+    productLinks[productType]
+  }?embed=1&media=0&logo=0&discount=0&checkout[custom][user_id]=${
     userId || ""
   }`;
 
+  useEffect(() => {
+    // @ts-ignore lemon squeezy is defined in the global scope
+    if (typeof window.createLemonSqueezy === "function") {
+      // @ts-ignore lemon squeezy is defined in the global scope
+      window.createLemonSqueezy();
+    }
+  }, []);
+
+  // @ts-ignore lemon squeezy is defined in the global scope
+  const isCheckoutReady = window.LemonSqueezy;
+
   return (
-    <Link href={userId ? buyLink : "#"} passHref>
-      <Button className={`text-white bg-blue-600`} disabled={!userId}>
-        קנה קרדיטים
-      </Button>
-    </Link>
+    <>
+      <Link href={userId ? buyLink : "#"} className="lemonsqueezy-button">
+        <Button
+          className={`text-white bg-blue-600 `}
+          disabled={!userId || !isCheckoutReady}
+        >
+          קנה קרדיטים
+        </Button>
+      </Link>
+      <Script src="https://app.lemonsqueezy.com/js/lemon.js" defer />
+    </>
   );
 };
 

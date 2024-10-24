@@ -92,6 +92,7 @@ export async function storeWebhookEvent(
 // Mapping of product_id to credits
 const productCreditsMap: Record<string, number> = {
   "375259": 5,
+  "378816": 20,
   // Add more mappings as needed
 };
 
