@@ -104,8 +104,42 @@ export function CreateForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <MultiStepForm>
             <Step
-              isNextDisabled={() => isStepValid(form, ["name", "against-name"])}
+              isNextDisabled={() =>
+                isStepValid(form, ["name", "against-name", "topic"])
+              }
             >
+              <FormField
+                control={form.control}
+                name="topic"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <Required />
+                      באיזה נושא אתם מעוניינים להתריע בפניו?
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="בחר נושא" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={Topic.DEFAMATION}>
+                          {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
+                        </SelectItem>
+                        <SelectItem value={Topic.FAKE_NEWS}>
+                          {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="name"
@@ -143,44 +177,7 @@ export function CreateForm() {
               />
             </Step>
 
-            <Step isNextDisabled={() => isStepValid(form, ["topic"])}>
-              <FormField
-                control={form.control}
-                name="topic"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Required />
-                      באיזה נושא אתם מעוניינים להתריע בפניו?
-                    </FormLabel>
-                    {/* <FormDescription>
-                      באיזה נושא אתם מעוניינים להתריע בפניו?
-                    </FormDescription> */}
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="בחר נושא" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={Topic.DEFAMATION}>
-                          {TOPIC_TO_HEBREW[Topic.DEFAMATION]}
-                        </SelectItem>
-                        <SelectItem value={Topic.FAKE_NEWS}>
-                          {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </Step>
-
-            <Step isNextDisabled={() => isStepValid(form, ["body"])}>
+            <Step isNextDisabled={() => isStepValid(form, ["body", "purpose"])}>
               <FormField
                 control={form.control}
                 name="body"
@@ -191,7 +188,32 @@ export function CreateForm() {
                         <Required />
                         מה התלונה?
                       </FormLabel>
-                      <FormDescription>כמה שיותר מידע יותר טוב</FormDescription>
+                      <FormDescription>
+                        תשתדלו להיות כמה שיותר מפורטים במקרה האירוע
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Textarea className="resize-none" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="purpose"
+                render={({ field }) => (
+                  <FormItem>
+                    <div>
+                      <FormLabel>
+                        <Required />
+                        מה מנסים להשיג?
+                      </FormLabel>
+                      <FormDescription>
+                        ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה
+                        ולא מכתב סחיטה
+                      </FormDescription>
                     </div>
                     <FormControl>
                       <Textarea className="resize-none" {...field} />
@@ -238,31 +260,6 @@ export function CreateForm() {
                     </FormItem>
                   );
                 }}
-              />
-            </Step>
-
-            <Step isNextDisabled={() => isStepValid(form, ["purpose"])}>
-              <FormField
-                control={form.control}
-                name="purpose"
-                render={({ field }) => (
-                  <FormItem>
-                    <div>
-                      <FormLabel>
-                        <Required />
-                        מה מנסים להשיג?
-                      </FormLabel>
-                      <FormDescription>
-                        ניתן לדרוש כל דבר במסגרת החוק, שימו לב שזה מכתב התראה
-                        ולא מכתב סחיטה
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Textarea className="resize-none" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
               />
             </Step>
 

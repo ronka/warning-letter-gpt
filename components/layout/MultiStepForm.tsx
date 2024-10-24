@@ -28,9 +28,9 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ children }) => {
       prevStep={prevStep}
       currentStep={currentStep}
     >
-      <div dir="rtl" className="w-full max-w-3xl mx-auto py-12 md:py-24">
+      <div dir="rtl" className="w-full">
         <div className="flex items-center justify-center mb-8">
-          <Progress value={progress} className="w-full" />
+          <Progress value={progress} className="w-full"></Progress>
         </div>
         <div className="bg-white dark:bg-gray-950 rounded-lg shadow-lg">
           <div className="p-6 md:p-8">

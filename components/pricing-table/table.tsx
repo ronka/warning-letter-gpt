@@ -7,7 +7,7 @@ export function PricingTable() {
     <div dir="rtl" className="w-full p-6">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center space-y-4">
-          <h1 className="text-5xl font-bold">בנה את מכתב ההתראה שלך בקלות</h1>
+          <h1 className="text-2xl font-bold">בנה את מכתב ההתראה שלך בקלות</h1>
           <p className="text-xl">
             הגן על שמך או על עסקיך מפני לשון הרע ופייק ניוז!
           </p>

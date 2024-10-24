@@ -1,3 +1,5 @@
+import { Button } from "../ui/button";
+import Link from "next/link";
 const Hero = () => {
   return (
     <section className="bg-muted py-12 md:py-24">
@@ -8,6 +10,11 @@ const Hero = () => {
         <p className="text-xl mb-8">
           בו לייצר מכתב התראה מהיר וקל לכל שם ומטרה שתרצה
         </p>
+        <Link href={"/letter"}>
+          <Button className={`text-white bg-blue-600`}>
+            צור מכתב התראה ✉️
+          </Button>
+        </Link>
       </div>
     </section>
   );
