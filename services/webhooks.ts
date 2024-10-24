@@ -3,8 +3,14 @@
 import { configureLemonSqueezy } from "@/config/lemonsqueezy";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
-import { NewWebhookEvent, WebhookEvent, webhookEvents } from "@/db/schema";
+import {
+  NewWebhookEvent,
+  userCredits,
+  WebhookEvent,
+  webhookEvents,
+} from "@/db/schema";
 import { webhookHasData, webhookHasMeta } from "@/lib/typeguards/webhook";
+import { sql } from "drizzle-orm";
 
 type WebhookEventToProcess = {
   id: WebhookEvent["id"];
@@ -44,9 +50,6 @@ export async function processWebhookEvent(webhookEvent: WebhookEventToProcess) {
     if (webhookEvent.event_name.startsWith("order_")) {
       // Save orders; eventBody is a "Order"
       /* Not implemented */
-    } else if (webhookEvent.event_name.startsWith("license_")) {
-      // Save license keys; eventBody is a "License key"
-      /* Not implemented */
     }
 
     // Update the webhook event in the database.
@@ -84,4 +87,57 @@ export async function storeWebhookEvent(
   }
 
   return insertedEvent.id;
+}
+
+// Mapping of product_id to credits
+const productCreditsMap: Record<string, number> = {
+  "375259": 5,
+  // Add more mappings as needed
+};
+
+export async function handleOrderEvent(rawEvent: unknown) {
+  if (!webhookHasData(rawEvent)) {
+    throw new Error("Invalid event data: event body missing 'data' property.");
+  }
+
+  const event = rawEvent;
+
+  const { product_id } = event.data.attributes.first_subscription_item;
+  const user_id = event.meta?.custom_data?.user_id;
+
+  if (!user_id || !product_id) {
+    throw new Error("Invalid event data: user_id or product_id missing.");
+  }
+
+  const credits = productCreditsMap[product_id];
+  if (credits === undefined) {
+    throw new Error(`No credits mapping found for product_id: ${product_id}`);
+  }
+
+  // Insert or update the user_credits table
+  await db.transaction(async (trx) => {
+    const existingRecord = await trx
+      .select()
+      .from(userCredits)
+      .where(eq(userCredits.user_id, user_id));
+
+    if (existingRecord.length > 0) {
+      // Update existing record
+      await trx
+        .update(userCredits)
+        .set({
+          credits_left: sql`credits_left + ${credits}`,
+        })
+        .where(eq(userCredits.user_id, user_id));
+    } else {
+      // Insert new record
+      await trx
+        .insert(userCredits)
+        .values({
+          user_id,
+          credits_left: credits,
+        })
+        .execute();
+    }
+  });
 }

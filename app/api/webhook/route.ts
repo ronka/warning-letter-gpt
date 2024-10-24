@@ -1,6 +1,10 @@
 /* src/app/api/webhook/route.ts */
 import { webhookHasMeta } from "@/lib/typeguards/webhook";
-import { processWebhookEvent, storeWebhookEvent } from "@/services/webhooks";
+import {
+  processWebhookEvent,
+  storeWebhookEvent,
+  handleOrderEvent,
+} from "@/services/webhooks";
 import crypto from "node:crypto";
 
 export async function POST(request: Request) {
@@ -29,12 +33,18 @@ export async function POST(request: Request) {
 
   // Type guard to check if the object has a 'meta' property.
   if (webhookHasMeta(data)) {
-    const webhookEventId = await storeWebhookEvent(data.meta.event_name, data);
+    const eventName = data.meta.event_name;
+
+    if (eventName.startsWith("order_created")) {
+      await handleOrderEvent(data);
+    }
+
+    const webhookEventId = await storeWebhookEvent(eventName, data);
 
     // Non-blocking call to process the webhook event.
     void processWebhookEvent({
       id: webhookEventId,
-      event_name: data.meta.event_name,
+      event_name: eventName,
       body: data,
     });
 

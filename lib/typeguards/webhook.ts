@@ -48,6 +48,7 @@ type WebhookEventBodyWithData = {
       first_subscription_item: {
         id: string;
         price_id: string;
+        product_id: string;
         is_usage_based: boolean;
       };
     };
