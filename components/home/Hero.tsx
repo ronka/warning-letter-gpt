@@ -1,5 +1,3 @@
-import BuyButton from "./BuyButton";
-
 const Hero = () => {
   return (
     <section className="bg-muted py-12 md:py-24">
@@ -10,7 +8,6 @@ const Hero = () => {
         <p className="text-xl mb-8">
           בו לייצר מכתב התראה מהיר וקל לכל שם ומטרה שתרצה
         </p>
-        <BuyButton />
       </div>
     </section>
   );
