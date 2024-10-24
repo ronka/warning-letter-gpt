@@ -102,7 +102,7 @@ export async function handleOrderEvent(rawEvent: unknown) {
 
   const event = rawEvent;
 
-  const { product_id } = event.data.attributes.first_subscription_item;
+  const { product_id } = event.data.attributes.first_order_item;
   const user_id = event.meta?.custom_data?.user_id;
 
   if (!user_id || !product_id) {

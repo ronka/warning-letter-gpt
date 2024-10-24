@@ -17,10 +17,10 @@ type WebhookEventBodyWithMeta = {
       renews_at: string;
       ends_at: string;
       trial_ends_at: string;
-      first_subscription_item: {
+      first_order_item: {
         id: string;
+        product_id: string;
         price_id: string;
-        is_usage_based: boolean;
       };
     };
   };
@@ -45,11 +45,10 @@ type WebhookEventBodyWithData = {
       renews_at: string;
       ends_at: string;
       trial_ends_at: string;
-      first_subscription_item: {
+      first_order_item: {
         id: string;
         price_id: string;
         product_id: string;
-        is_usage_based: boolean;
       };
     };
   };
