@@ -48,6 +48,7 @@ export const useLetterMutation = () => {
     mutationFn: USE_MOCK_API ? mockGenerateAsync : generateAsync,
     onSuccess: (data) => {
       queryClient.setQueryData(["letter", data.id], data);
+      queryClient.invalidateQueries({ queryKey: ["credits"] });
       queryClient.invalidateQueries({ queryKey: ["userLetters"] });
     },
   });
