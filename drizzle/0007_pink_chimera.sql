@@ -1,0 +1,1 @@
+ALTER TABLE "webhookEvent" DROP COLUMN IF EXISTS "body";

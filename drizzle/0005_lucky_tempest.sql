@@ -1,0 +1,1 @@
+ALTER TABLE "webhookEvent" ALTER COLUMN "id" SET DATA TYPE serial;

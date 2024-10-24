@@ -1,0 +1,1 @@
+ALTER TABLE "webhook_event" DROP COLUMN IF EXISTS "created_at";

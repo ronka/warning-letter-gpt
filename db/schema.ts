@@ -1,4 +1,12 @@
-import { pgTable, serial, text, timestamp, integer } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  integer,
+  jsonb,
+  boolean,
+} from "drizzle-orm/pg-core";
 
 export const letters = pgTable("letters", {
   id: serial("id").primaryKey(),
@@ -18,8 +26,20 @@ export const userCredits = pgTable("user_credits", {
   last_usage: timestamp("last_usage").defaultNow().notNull(),
 });
 
+export const webhookEvents = pgTable("webhook_event", {
+  id: serial("id").primaryKey(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  event_name: text("event_name").notNull(),
+  processed: boolean("processed").default(false),
+  body: jsonb("body").notNull(),
+  processing_error: text("processing_error"),
+});
+
 export type Letter = typeof letters.$inferSelect;
 export type NewLetter = typeof letters.$inferInsert;
 
 export type UserCredit = typeof userCredits.$inferSelect;
 export type NewUserCredit = typeof userCredits.$inferInsert;
+
+export type WebhookEvent = typeof webhookEvents.$inferSelect;
+export type NewWebhookEvent = typeof webhookEvents.$inferInsert;

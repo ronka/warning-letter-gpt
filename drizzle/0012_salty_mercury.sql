@@ -1,0 +1,1 @@
+ALTER TABLE "webhook_event" ALTER COLUMN "body" SET DATA TYPE jsonb;

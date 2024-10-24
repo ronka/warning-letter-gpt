@@ -22,6 +22,104 @@
       "when": 1729253189690,
       "tag": "0002_same_eternals",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1729772349576,
+      "tag": "0003_modern_prowler",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1729772686486,
+      "tag": "0004_damp_juggernaut",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1729772774488,
+      "tag": "0005_lucky_tempest",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1729772805763,
+      "tag": "0006_glorious_daredevil",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1729772845102,
+      "tag": "0007_pink_chimera",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1729772886582,
+      "tag": "0008_nappy_the_twelve",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1729773016333,
+      "tag": "0009_tan_gateway",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1729773070300,
+      "tag": "0010_colossal_piledriver",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1729773086854,
+      "tag": "0011_mysterious_nebula",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1729773240027,
+      "tag": "0012_salty_mercury",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1729773359544,
+      "tag": "0013_sudden_hemingway",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1729773368873,
+      "tag": "0014_living_bullseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1729773389015,
+      "tag": "0015_lovely_ikaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1729773962393,
+      "tag": "0016_aberrant_night_thrasher",
+      "breakpoints": true
     }
   ]
 }
