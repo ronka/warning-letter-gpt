@@ -2,6 +2,14 @@ import * as z from "zod";
 import { letters } from "../db/schema";
 
 // Zod schema for letter input validation
+export const LetterOuputSchema = z.object({
+  title: z.string().describe("The title of the letter"),
+  warningPoints: z
+    .array(z.string())
+    .describe("The body of the warning letter, should be listing in a list"),
+});
+
+// Zod schema for letter input validation
 export const LetterInputSchema = z.object({
   title: z.string().describe("The title of the letter"),
   initialDate: z.string(),
@@ -26,6 +34,7 @@ export const LetterResponseSchema = z.object({
   }),
 });
 
+export type LetterOuput = z.infer<typeof LetterOuputSchema>;
 export type LetterInput = z.infer<typeof LetterInputSchema>;
 export type LetterResponse = z.infer<typeof LetterResponseSchema>;
 

@@ -10,13 +10,7 @@ import {
 import { useUserLettersQuery } from "@/context/Letter";
 import Link from "next/link";
 import LetterSkeleton from "@/components/LetterSkeleton";
-
-interface Letter {
-  id: string;
-  title: string;
-  to: string;
-  body: string;
-}
+import { Letter } from "@/db/schema";
 
 interface LetterCardProps {
   letter: Partial<Letter>;
@@ -32,20 +26,27 @@ const LetterCard: React.FC<LetterCardProps> = ({
       {isLoading ? (
         <LetterSkeleton count={1} />
       ) : (
-        <CardTitle>{letter.title} </CardTitle>
+        <CardTitle>{letter.title}</CardTitle>
       )}
 
       {isLoading ? (
         <LetterSkeleton count={1} />
       ) : (
-        <CardDescription>עבור: {letter.to}</CardDescription>
+        <CardDescription>עבור: {letter.recipientName}</CardDescription>
       )}
     </CardHeader>
     <CardContent>
       {isLoading ? (
-        <LetterSkeleton count={8} />
+        <LetterSkeleton count={3} />
       ) : (
-        <p className="text-sm text-muted-foreground">{letter.body}</p>
+        <>
+          <p className="text-sm text-muted-foreground mb-2">
+            תאריך: {letter.initialDate}
+          </p>
+          <p className="text-sm text-muted-foreground mb-2">
+            מאת: {letter.senderName}
+          </p>
+        </>
       )}
     </CardContent>
   </Card>

@@ -7,6 +7,7 @@ import {
   LetterInputSchema,
   LetterInput,
   LetterResponseSchema,
+  LetterOuputSchema,
 } from "@/types/Letter";
 import { db } from "@/db";
 import { letters, userCredits } from "@/db/schema";
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest) {
     const data = parseFormData(formData);
     const images = await filesToBuffers(data["file"] ?? []);
 
-    const topic = data["topic"] as keyof typeof TopicToDesciption;
+    const topic = data["topic"];
 
     const messages: CoreMessage[] = [
       {
@@ -79,14 +80,15 @@ export async function POST(req: NextRequest) {
 		The reason for this warning letter from the client is:
 		"${data["body"]}".
 		The wanted outcome of the letter should be: "${data["purpose"]}".
-		Use the examples and refer to the law as much as possible, DONT refer if you dont find it in the law, what this letter is about with the wanted outcome listed in that list
+		Refer to the <the-law> section when generating the letter, DONT refer if you dont find it in the law
+		use the <warning-letter-examples> section as a guide for the letter, but dont copy it exactly
 		
 		<the-law>
 		   ${TopicToDesciption[topic].law}
 		</the-law>
 
 		<warning-letter-examples>
-	   		${TopicToDesciption[topic].examples.join("\n")}
+	   		${TopicToDesciption[topic].examples.join("\n----\n")}
 		</warning-letter-examples>`,
       },
     ];
@@ -106,13 +108,13 @@ export async function POST(req: NextRequest) {
 
     const { object } = await generateObject({
       model: openai("gpt-4o"),
-      schema: LetterInputSchema,
+      schema: LetterOuputSchema,
       system: `You are an attorney and you help your client to write a warning letter to do what ever the client request you to do.
 		You are a professional and you know how to write a warning letter, but the letter should sound like it was written by the client.
 		Refer to law only from what i provide you.
 		Dont put placeholders, if you dont have the data don't write it.
 		
-		the letter MUST be in hebrew`,
+		everything you output MUST be in hebrew`,
       messages,
     });
 
@@ -122,9 +124,9 @@ export async function POST(req: NextRequest) {
     const newLetter: LetterInput = {
       title: object.title,
       initialDate: currentDate,
-      recipientName: data["against-name"] as string,
+      recipientName: data["against-name"],
       warningPoints: object.warningPoints,
-      senderName: data["name"] as string,
+      senderName: data["name"],
     };
 
     // Use a transaction to ensure both operations succeed or fail together

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface WarningLetterProps {
   title: string;
   initialDate: string;

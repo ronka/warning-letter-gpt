@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { letters } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET(req: NextRequest) {
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
       .select()
       .from(letters)
       .where(eq(letters.user_id, userId))
-      .orderBy(letters.createdAt);
+      .orderBy(desc(letters.createdAt));
 
     return NextResponse.json(userLetters);
   } catch (error) {
