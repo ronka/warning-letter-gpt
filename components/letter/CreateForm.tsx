@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 import { useLetterMutation } from "@/context/Letter";
 import { FormData } from "@/types/FormData";
 import { isStepValid } from "@/utils/formValidation";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
@@ -55,8 +55,11 @@ const formSchema = z.object({
 
 export function CreateForm() {
   const router = useRouter();
-  const { mutateAsync: createLetter, isPending: isLoading } =
-    useLetterMutation();
+  const {
+    mutateAsync: createLetter,
+    isPending: isLoading,
+    isSuccess,
+  } = useLetterMutation();
   const { toast } = useToast();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -288,18 +291,34 @@ export function CreateForm() {
                       {form.getValues().purpose}
                     </div>
                   </div>
-                </div>
 
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      יוצר מכתב... זה עלול לקחת מספר רגעים
-                    </>
-                  ) : (
-                    "יצירת מכתב"
+                  <Button
+                    className="w-full"
+                    type="submit"
+                    disabled={isLoading || isSuccess}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                        יוצר מכתב... זה עלול לקחת מספר רגעים
+                      </>
+                    ) : isError ? (
+                      <>
+                        <AlertCircle className="ml-2 h-4 w-4" />
+                        נסה שוב
+                      </>
+                    ) : (
+                      "יצירת מכתב"
+                    )}
+                  </Button>
+
+                  {isError && (
+                    <div className="text-red-500 flex items-center mb-4">
+                      <AlertCircle className="ml-2 h-4 w-4" />
+                      <span>אירעה שגיאה. אנא נסה שוב.</span>
+                    </div>
                   )}
-                </Button>
+                </div>
               </div>
             </Step>
           </MultiStepForm>
