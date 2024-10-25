@@ -17,6 +17,8 @@ function WarningLetter({
   sender,
   title,
 }: WarningLetterProps) {
+  const contentLines = letterContent.split("\n");
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div
@@ -34,7 +36,11 @@ function WarningLetter({
 
         <h1 className="text-2xl font-bold mb-4 text-center">הנדון: {title}</h1>
 
-        <ol className="space-y-4 mb-8">{letterContent}</ol>
+        <div className="space-y-4 mb-8">
+          {contentLines.map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
+        </div>
 
         <div className="mt-8">
           <div className="w-40 h-20 border-b border-black mb-2"></div>
