@@ -21,12 +21,7 @@ const BuyButton = ({ productType }: BuyButtonProps) => {
   return (
     <>
       <Link href={buyLink} className="lemonsqueezy-button">
-        <Button
-          className="text-white bg-blue-600"
-          disabled={userId ? !isCheckoutReady : false}
-        >
-          קנה קרדיטים
-        </Button>
+        <Button disabled={!isCheckoutReady}>קנה קרדיטים</Button>
       </Link>
       <Script src="https://app.lemonsqueezy.com/js/lemon.js" defer />
     </>
