@@ -30,8 +30,9 @@ import { useRouter } from "next/navigation";
 import { useLetterMutation } from "@/context/Letter";
 import { FormData } from "@/types/FormData";
 import { isStepValid } from "@/utils/formValidation";
-import { Loader2, AlertCircle, CheckCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { SubmitButton } from "@/components/letter/SubmitButton";
 
 const formSchema = z.object({
   file:
@@ -293,30 +294,11 @@ export function CreateForm() {
                     </div>
                   </div>
 
-                  <Button
-                    className="w-full"
-                    type="submit"
-                    disabled={isLoading || isSuccess}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-                        יוצר מכתב... זה עלול לקחת מספר רגעים
-                      </>
-                    ) : isError ? (
-                      <>
-                        <AlertCircle className="ml-2 h-4 w-4" />
-                        נסה שוב
-                      </>
-                    ) : isSuccess ? (
-                      <>
-                        <CheckCircle className="ml-2 h-4 w-4" />
-                        מכתב נוצר בהצלחה, עובר לעמוד המכתב
-                      </>
-                    ) : (
-                      "יצירת מכתב"
-                    )}
-                  </Button>
+                  <SubmitButton
+                    isLoading={isLoading}
+                    isError={isError}
+                    isSuccess={isSuccess}
+                  />
 
                   {isError && (
                     <div className="text-red-500 flex items-center mb-4">
