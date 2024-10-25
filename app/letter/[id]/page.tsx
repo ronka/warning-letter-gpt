@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import LetterSkeleton from "@/components/LetterSkeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
+import { WarningLetter } from "@/components/letter/WarningLetter";
 
 export default function LetterDetailPage({
   params,
@@ -33,34 +34,22 @@ export default function LetterDetailPage({
     return null;
   }
 
-  const visibleContent = data
-    ? `לכבוד ${data.to}\n\n${data.title}\n\n${data.body}`
-    : "";
-
   const handleDownload = () => {
     // Implement download functionality here
   };
 
   const handleEditClick = () => {
+    if (!data) return;
     setIsEditing(true);
-    setEditedContent(visibleContent);
+    setEditedContent(JSON.stringify(data, null, 2));
   };
 
   const handleSaveClick = async () => {
     if (!data) return;
 
-    // Split the edited content to update the letter data
-    const [to, ...rest] = editedContent.split("\n\n");
-    const [title, ...bodyParts] = rest;
-    const body = bodyParts.join("\n\n");
-
     try {
-      await updateLetter({
-        ...data,
-        to: to.replace("לכבוד ", ""),
-        title,
-        body,
-      });
+      const updatedData = JSON.parse(editedContent);
+      await updateLetter(updatedData);
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to save changes:", error);
@@ -91,11 +80,15 @@ export default function LetterDetailPage({
                 onChange={(e) => setEditedContent(e.target.value)}
                 className="w-full h-[400px] p-6 text-lg leading-relaxed"
               />
-            ) : (
-              <div className="p-6 relative text-lg leading-relaxed whitespace-pre-wrap">
-                {visibleContent}
-              </div>
-            )}
+            ) : data ? (
+              <WarningLetter
+                title={data.title}
+                initialDate={data.initialDate}
+                recipient={{ name: data.recipientName }}
+                warningPoints={data.warningPoints}
+                sender={{ name: data.senderName }}
+              />
+            ) : null}
           </CardContent>
           <CardFooter className="flex justify-center gap-4">
             {isEditing ? (

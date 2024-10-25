@@ -61,7 +61,12 @@ export async function PUT(req: NextRequest) {
 
     const updatedLetter = await db
       .update(letters)
-      .set({ to, title, body: letterBody, updatedAt: new Date() })
+      .set({
+        recipientName: to,
+        title,
+        warningPoints: letterBody,
+        updatedAt: new Date(),
+      })
       .where(and(eq(letters.id, id), eq(letters.user_id, userId)))
       .returning();
 

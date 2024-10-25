@@ -1,9 +1,13 @@
 import { FormData } from "@/types/FormData";
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
-import { ImagePart, generateObject } from "ai";
+import { ImagePart, generateObject, CoreMessage } from "ai";
 import { TopicToDesciption } from "@/data/Topics";
-import { LetterInputSchema, LetterInput } from "@/types/Letter";
+import {
+  LetterInputSchema,
+  LetterInput,
+  LetterResponseSchema,
+} from "@/types/Letter";
 import { db } from "@/db";
 import { letters, userCredits } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
@@ -65,6 +69,41 @@ export async function POST(req: NextRequest) {
 
     const topic = data["topic"] as keyof typeof TopicToDesciption;
 
+    const messages: CoreMessage[] = [
+      {
+        role: "system",
+        content: `Write a warning letter to ${
+          data["against-name"]
+        } in the name of the client, ${data["name"]}.
+		the topic of the letter is: "${data["topic"]}".
+		The reason for this warning letter from the client is:
+		"${data["body"]}".
+		The wanted outcome of the letter should be: "${data["purpose"]}".
+		Use the examples and refer to the law as much as possible, DONT refer if you dont find it in the law, what this letter is about with the wanted outcome listed in that list
+		
+		<the-law>
+		   ${TopicToDesciption[topic].law}
+		</the-law>
+
+		<warning-letter-examples>
+	   		${TopicToDesciption[topic].examples.join("\n")}
+		</warning-letter-examples>`,
+      },
+    ];
+
+    if (images.length > 0) {
+      messages.push({
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: "here is a list of evidence that you can use:",
+          },
+          ...imagesToImageParts(images),
+        ],
+      });
+    }
+
     const { object } = await generateObject({
       model: openai("gpt-4o"),
       schema: LetterInputSchema,
@@ -74,48 +113,29 @@ export async function POST(req: NextRequest) {
 		Dont put placeholders, if you dont have the data don't write it.
 		
 		the letter MUST be in hebrew`,
-      messages: [
-        {
-          role: "system",
-          content: `Write a warning letter to ${
-            data["against-name"]
-          } in the name of the client, ${data["name"]}.
-		  the topic of the letter is: "${data["topic"]}".
-		  The reason for this warning letter from the client is:
-		  "${data["body"]}".
-		  The wanted outcome of the letter should be: "${data["purpose"]}".
-		  
-		 the law regreding this topic is:
-		 ${TopicToDesciption[topic].law}
-		 
-		 Here are examples for a warning letter:
-		 ${TopicToDesciption[topic].examples.join("\n")}`,
-        },
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "here is a list of evidence that you can use:",
-            },
-            ...imagesToImageParts(images),
-          ],
-        },
-      ],
+      messages,
     });
+
+    const currentDate = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format
 
     // Insert the generated letter into the database
     const newLetter: LetterInput = {
-      to: data["against-name"],
       title: object.title,
-      body: object.body,
-      wantedOutcome: object.wantedOutcome,
-      user_id: userId,
+      initialDate: currentDate,
+      recipientName: data["against-name"] as string,
+      warningPoints: object.warningPoints,
+      senderName: data["name"] as string,
     };
 
     // Use a transaction to ensure both operations succeed or fail together
     const [insertedLetter] = await db.transaction(async (tx) => {
-      const [letter] = await tx.insert(letters).values(newLetter).returning();
+      const [letter] = await tx
+        .insert(letters)
+        .values({
+          ...newLetter,
+          user_id: userId,
+        })
+        .returning();
 
       await tx
         .update(userCredits)
@@ -128,8 +148,22 @@ export async function POST(req: NextRequest) {
       return [letter];
     });
 
+    // Transform the inserted letter to match LetterResponseSchema
+    const responseData = LetterResponseSchema.parse({
+      id: insertedLetter.id,
+      title: insertedLetter.title,
+      initialDate: insertedLetter.initialDate,
+      recipient: {
+        name: insertedLetter.recipientName,
+      },
+      warningPoints: insertedLetter.warningPoints,
+      sender: {
+        name: insertedLetter.senderName,
+      },
+    });
+
     // Return response
-    return NextResponse.json(insertedLetter);
+    return NextResponse.json(responseData);
   } catch (error) {
     // Handle errors
     console.error("Error generating letter:", error);

@@ -3,31 +3,27 @@ import { letters } from "../db/schema";
 
 // Zod schema for letter input validation
 export const LetterInputSchema = z.object({
-  to: z.string().min(1).describe("The recipient of the warning letter"),
-  title: z.string().min(1).describe("The title of the warning letter"),
-  body: z
-    .string()
-    .min(1)
-    .describe("The body of the warning letter, what this letter is about"),
-  wantedOutcome: z
-    .string()
-    .min(1)
-    .describe("The wanted outcome of the warning letter"),
-  user_id: z
-    .string()
-    .min(1)
-    .describe("The ID of the user who created the letter"),
+  title: z.string().describe("The title of the letter"),
+  initialDate: z.string(),
+  recipientName: z.string(),
+  warningPoints: z
+    .array(z.string())
+    .describe("The body of the warning letter, should be listing in a list"),
+  senderName: z.string(),
 });
 
 // Zod schema for letter response, including database fields
 export const LetterResponseSchema = z.object({
   id: z.number(),
-  to: z.string(),
   title: z.string(),
-  body: z.string(),
-  wantedOutcome: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  initialDate: z.string(),
+  recipient: z.object({
+    name: z.string(),
+  }),
+  warningPoints: z.array(z.string()),
+  sender: z.object({
+    name: z.string(),
+  }),
 });
 
 export type LetterInput = z.infer<typeof LetterInputSchema>;
