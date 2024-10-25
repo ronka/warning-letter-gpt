@@ -4,7 +4,11 @@ import { letters } from "../db/schema";
 // Zod schema for letter input validation
 export const LetterOuputSchema = z.object({
   title: z.string().describe("The title of the letter"),
-  letterContent: z.string().describe("The body of the warning letter"),
+  letterContent: z
+    .string()
+    .describe(
+      "The letter content. include ONLY the body of the letter, without the title, the footer and the signature"
+    ),
 });
 
 // Zod schema for letter input validation

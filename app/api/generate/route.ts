@@ -80,8 +80,10 @@ export async function POST(req: NextRequest) {
 		The reason for this warning letter from the client is:
 		"${data["body"]}".
 		The wanted outcome of the letter should be: "${data["purpose"]}".
-		Refer to the <the-law> section when generating the letter, DONT refer if you dont find it in the law
-		use the <warning-letter-examples> section as a guide for the letter, but dont copy it exactly
+		Refer to the <the-law> section when generating the letter, DONT refer if you dont find it in the law.
+		use the <warning-letter-examples> section as a guide for the letter, but dont copy it exactly.
+
+		the letterContent should include ONLY the body of the letter, without the title, the footer and the signature.
 		
 		<the-law>
 		   ${TopicToDesciption[topic].law}
