@@ -59,60 +59,56 @@ export default function LetterDetailPage({
 
   return (
     <section className="py-12">
-      <div className="container mx-auto px-4">
-        <Card className="w-full max-w-3xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">
-              מכתב ההתראה שלך
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="prose dark:prose-invert max-w-none">
-            {isLoading ? (
-              <div className="flex flex-col gap-4">
-                <LetterSkeleton />
-                <LetterSkeleton />
-                <LetterSkeleton />
-                <LetterSkeleton />
-              </div>
-            ) : isEditing ? (
-              <Textarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="w-full h-[400px] p-6 text-lg leading-relaxed"
-              />
-            ) : data ? (
-              <WarningLetter
-                title={data.title}
-                initialDate={data.initialDate}
-                recipient={{ name: data.recipientName }}
-                letterContent={data.letterContent}
-                sender={{ name: data.senderName }}
-              />
-            ) : null}
-          </CardContent>
-          <CardFooter className="flex justify-center gap-4">
-            {isEditing ? (
-              <Button
-                onClick={handleSaveClick}
-                disabled={isLoading || isUpdating}
-              >
-                💾 {isUpdating ? <Spinner /> : "שמור"}
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                onClick={handleEditClick}
-                disabled={isLoading}
-              >
-                🖊️ עריכה
-              </Button>
-            )}
-            <Button onClick={handleDownload} disabled={isLoading || isEditing}>
-              ↓ {isLoading ? "טוען..." : "להורדה"}
+      <Card className="w-full  mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">מכתב ההתראה שלך</CardTitle>
+        </CardHeader>
+        <CardContent className="prose dark:prose-invert max-w-none">
+          {isLoading ? (
+            <div className="flex flex-col gap-4">
+              <LetterSkeleton />
+              <LetterSkeleton />
+              <LetterSkeleton />
+              <LetterSkeleton />
+            </div>
+          ) : isEditing ? (
+            <Textarea
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              className="w-full h-[400px] p-6 text-lg leading-relaxed"
+            />
+          ) : data ? (
+            <WarningLetter
+              title={data.title}
+              initialDate={data.initialDate}
+              recipient={{ name: data.recipientName }}
+              letterContent={data.letterContent}
+              sender={{ name: data.senderName }}
+            />
+          ) : null}
+        </CardContent>
+        <CardFooter className="flex justify-center gap-4">
+          {isEditing ? (
+            <Button
+              onClick={handleSaveClick}
+              disabled={isLoading || isUpdating}
+            >
+              💾 {isUpdating ? <Spinner /> : "שמור"}
             </Button>
-          </CardFooter>
-        </Card>
-      </div>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={handleEditClick}
+              disabled={isLoading}
+            >
+              🖊️ עריכה
+            </Button>
+          )}
+          <Button onClick={handleDownload} disabled={isLoading || isEditing}>
+            ↓ {isLoading ? "טוען..." : "להורדה"}
+          </Button>
+        </CardFooter>
+      </Card>
     </section>
   );
 }

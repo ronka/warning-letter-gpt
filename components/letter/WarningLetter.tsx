@@ -20,9 +20,9 @@ function WarningLetter({
   const contentLines = letterContent.split("\n");
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="bg-muted flex items-center justify-center p-2 md:p-4">
       <div
-        className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full"
+        className="bg-white p-4 md:p-8 rounded-lg shadow-lg max-w-2xl w-full"
         dir="rtl"
       >
         <div className="text-right mb-4">
