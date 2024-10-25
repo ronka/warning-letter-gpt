@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
       title: object.title,
       initialDate: currentDate,
       recipientName: data["against-name"],
-      warningPoints: object.warningPoints,
+      letterContent: object.letterContent,
       senderName: data["name"],
     };
 
@@ -158,7 +158,7 @@ export async function POST(req: NextRequest) {
       recipient: {
         name: insertedLetter.recipientName,
       },
-      warningPoints: insertedLetter.warningPoints,
+      letterContent: insertedLetter.letterContent,
       sender: {
         name: insertedLetter.senderName,
       },

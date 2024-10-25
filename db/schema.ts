@@ -13,7 +13,7 @@ export const letters = pgTable("letters", {
   title: text("title").notNull(),
   initialDate: text("initial_date").notNull(),
   recipientName: text("recipient_name").notNull(),
-  warningPoints: text("warning_points").array().notNull(),
+  letterContent: text("letter_content").notNull(),
   senderName: text("sender_name").notNull(),
   user_id: text("user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),

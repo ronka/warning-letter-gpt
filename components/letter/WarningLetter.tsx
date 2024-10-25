@@ -4,7 +4,7 @@ interface WarningLetterProps {
   recipient: {
     name: string;
   };
-  warningPoints: string[];
+  letterContent: string;
   sender: {
     name: string;
   };
@@ -13,7 +13,7 @@ interface WarningLetterProps {
 function WarningLetter({
   initialDate,
   recipient,
-  warningPoints,
+  letterContent,
   sender,
   title,
 }: WarningLetterProps) {
@@ -34,13 +34,7 @@ function WarningLetter({
 
         <h1 className="text-2xl font-bold mb-4 text-center">הנדון: {title}</h1>
 
-        <ol className="space-y-4 mb-8">
-          {warningPoints.map((point, index) => (
-            <li key={index}>
-              {index + 1}. {point}
-            </li>
-          ))}
-        </ol>
+        <ol className="space-y-4 mb-8">{letterContent}</ol>
 
         <div className="mt-8">
           <div className="w-40 h-20 border-b border-black mb-2"></div>

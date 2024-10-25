@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest) {
       .set({
         recipientName: to,
         title,
-        warningPoints: letterBody,
+        letterContent: letterBody,
         updatedAt: new Date(),
       })
       .where(and(eq(letters.id, id), eq(letters.user_id, userId)))

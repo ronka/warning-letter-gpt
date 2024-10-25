@@ -85,7 +85,7 @@ export default function LetterDetailPage({
                 title={data.title}
                 initialDate={data.initialDate}
                 recipient={{ name: data.recipientName }}
-                warningPoints={data.warningPoints}
+                letterContent={data.letterContent}
                 sender={{ name: data.senderName }}
               />
             ) : null}
