@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Script from "next/script";
-import { useEffect } from "react";
+import { useLemonSqueezy } from "@/hooks/useLemonSqueezy";
 
 type BuyButtonProps = {
   productType: "5-credits" | "20-credits";
@@ -20,29 +20,18 @@ const productLinks: Record<BuyButtonProps["productType"], string> = {
 const BuyButton = ({ productType }: BuyButtonProps) => {
   const { user } = useUser();
   const userId = user?.id;
-  const buyLink = `${
-    productLinks[productType]
-  }?embed=1&media=0&logo=0&discount=0&checkout[custom][user_id]=${
-    userId || ""
-  }`;
+  const isCheckoutReady = useLemonSqueezy();
 
-  useEffect(() => {
-    // @ts-ignore lemon squeezy is defined in the global scope
-    if (typeof window.createLemonSqueezy === "function") {
-      // @ts-ignore lemon squeezy is defined in the global scope
-      window.createLemonSqueezy();
-    }
-  }, []);
-
-  // @ts-ignore lemon squeezy is defined in the global scope
-  const isCheckoutReady = window.LemonSqueezy;
+  const buyLink = userId
+    ? `${productLinks[productType]}?embed=1&media=0&logo=0&discount=0&checkout[custom][user_id]=${userId}`
+    : "/sign-in"; // Route to sign-in page if no user ID
 
   return (
     <>
-      <Link href={userId ? buyLink : "#"} className="lemonsqueezy-button">
+      <Link href={buyLink} className="lemonsqueezy-button">
         <Button
-          className={`text-white bg-blue-600 `}
-          disabled={!userId || !isCheckoutReady}
+          className="text-white bg-blue-600"
+          disabled={userId ? !isCheckoutReady : false}
         >
           קנה קרדיטים
         </Button>
