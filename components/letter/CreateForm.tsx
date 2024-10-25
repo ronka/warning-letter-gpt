@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 import { useLetterMutation } from "@/context/Letter";
 import { FormData } from "@/types/FormData";
 import { isStepValid } from "@/utils/formValidation";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
@@ -59,6 +59,7 @@ export function CreateForm() {
     mutateAsync: createLetter,
     isPending: isLoading,
     isSuccess,
+    isError,
   } = useLetterMutation();
   const { toast } = useToast();
   const form = useForm<FormData>({
@@ -306,6 +307,11 @@ export function CreateForm() {
                       <>
                         <AlertCircle className="ml-2 h-4 w-4" />
                         נסה שוב
+                      </>
+                    ) : isSuccess ? (
+                      <>
+                        <CheckCircle className="ml-2 h-4 w-4" />
+                        מכתב נוצר בהצלחה, עובר לעמוד המכתב
                       </>
                     ) : (
                       "יצירת מכתב"
