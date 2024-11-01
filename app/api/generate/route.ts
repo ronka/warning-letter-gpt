@@ -4,7 +4,6 @@ import { openai } from "@ai-sdk/openai";
 import { ImagePart, generateObject, CoreMessage } from "ai";
 import { TopicToDesciption } from "@/data/Topics";
 import {
-  LetterInputSchema,
   LetterInput,
   LetterResponseSchema,
   LetterOuputSchema,
@@ -13,6 +12,7 @@ import { db } from "@/db";
 import { letters, userCredits } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { ERROR_MESSAGES } from "@/constants/errors";
 
 const parseFormData = (formData: globalThis.FormData): FormData => {
   const data = {} as FormData;
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     if (!userCredit || userCredit.credits_left < 1) {
       return NextResponse.json(
-        { error: "Insufficient credits" },
+        { error: ERROR_MESSAGES.INSUFFICIENT_CREDITS },
         { status: 403 }
       );
     }
@@ -169,10 +169,9 @@ export async function POST(req: NextRequest) {
     // Return response
     return NextResponse.json(responseData);
   } catch (error) {
-    // Handle errors
     console.error("Error generating letter:", error);
     return NextResponse.json(
-      { error: "Invalid request or server error" },
+      { error: ERROR_MESSAGES.DEFAULT },
       { status: 400 }
     );
   }

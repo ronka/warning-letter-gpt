@@ -33,6 +33,12 @@ import { isStepValid } from "@/utils/formValidation";
 import { AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { SubmitButton } from "@/components/letter/SubmitButton";
+import { ERROR_MESSAGES, ERROR_MESSAGES_HEBREW } from "@/constants/errors";
+import { AxiosError } from "axios";
+
+type ApiErrorResponse = {
+  error: string;
+};
 
 const formSchema = z.object({
   file:
@@ -73,18 +79,23 @@ export function CreateForm() {
     },
   });
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const onSubmit = async (values: FormData) => {
     try {
+      setServerError(null);
       const newLetter = await createLetter(values);
       router.push(`/letter/${newLetter.id}`);
     } catch (error) {
       console.error("Error creating letter", error);
-      toast({
-        title: "שגיאה",
-        description: "אירעה שגיאה ביצירת המכתב. אנא נסה שוב.",
-        variant: "destructive",
-      });
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+
+      const errorMessage =
+        axiosError.response?.data?.error === ERROR_MESSAGES.INSUFFICIENT_CREDITS
+          ? ERROR_MESSAGES_HEBREW[ERROR_MESSAGES.INSUFFICIENT_CREDITS]
+          : ERROR_MESSAGES_HEBREW.DEFAULT;
+
+      setServerError(errorMessage);
     }
   };
 
@@ -300,10 +311,14 @@ export function CreateForm() {
                     isSuccess={isSuccess}
                   />
 
-                  {isError && (
+                  {(isError || serverError) && (
                     <div className="text-red-500 flex items-center mb-4">
                       <AlertCircle className="ml-2 h-4 w-4" />
-                      <span>אירעה שגיאה. אנא נסה שוב.</span>
+                      <span>
+                        {serverError ||
+                          form.formState.errors.root?.message ||
+                          ERROR_MESSAGES_HEBREW.DEFAULT}
+                      </span>
                     </div>
                   )}
                 </div>
