@@ -127,11 +127,6 @@ export function CreateForm() {
                 isStepValid(form, ["name", "against-name", "topic"]) ||
                 creditsLeft === 0
               }
-              errorMessage={
-                creditsLeft === 0
-                  ? ERROR_MESSAGES_HEBREW[ERROR_MESSAGES.INSUFFICIENT_CREDITS]
-                  : undefined
-              }
             >
               <FormField
                 control={form.control}
