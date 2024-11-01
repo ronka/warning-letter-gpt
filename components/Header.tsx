@@ -2,7 +2,6 @@
 
 import { SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
-import { Credits } from "./header/credits";
 import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -10,11 +9,6 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 
 const NavItems = ({ onClick }: { onClick?: () => void }) => (
   <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 gap-4 items-center p-4 md:p-0">
-    <li>
-      <Link href="/" className="hover:underline" onClick={onClick}>
-        בית
-      </Link>
-    </li>
     <li>
       <Link href="/letter" className="hover:underline" onClick={onClick}>
         צור מכתב
@@ -25,9 +19,11 @@ const NavItems = ({ onClick }: { onClick?: () => void }) => (
         המכתבים שיצרת
       </Link>
     </li>
-    <SignedIn>
-      <Credits />
-    </SignedIn>
+    <li>
+      <Link href="/credits" className="hover:underline" onClick={onClick}>
+        רכישת קרדיטים
+      </Link>
+    </li>
     <li>
       <SignedOut>
         <Link href="/sign-in" className="hover:underline" onClick={onClick}>

@@ -4,12 +4,19 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useStep } from "@/context/Step";
 import { NextButton } from "./NextButton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface StepProps {
   children: React.ReactNode;
   title?: string;
   description?: string;
   isNextDisabled: boolean | (() => boolean);
+  errorMessage?: string;
 }
 
 const Step: React.FC<StepProps> = ({
@@ -17,6 +24,7 @@ const Step: React.FC<StepProps> = ({
   title,
   description,
   isNextDisabled,
+  errorMessage,
 }) => {
   const isDisabled =
     typeof isNextDisabled === "function" ? isNextDisabled() : isNextDisabled;
@@ -32,6 +40,7 @@ const Step: React.FC<StepProps> = ({
         )}
       </div>
       {children}
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       <div className="flex justify-between py-6 md:py-8 border-t dark:border-gray-800">
         <Button
           variant="outline"

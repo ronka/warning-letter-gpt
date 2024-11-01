@@ -35,6 +35,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SubmitButton } from "@/components/letter/SubmitButton";
 import { ERROR_MESSAGES, ERROR_MESSAGES_HEBREW } from "@/constants/errors";
 import { AxiosError } from "axios";
+import { useCredits } from "@/context/Credits";
 
 type ApiErrorResponse = {
   error: string;
@@ -80,6 +81,8 @@ export function CreateForm() {
   });
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
+  const { data: credits } = useCredits();
+  const creditsLeft = credits?.credits_left ?? 0;
 
   const onSubmit = async (values: FormData) => {
     try {
@@ -121,7 +124,13 @@ export function CreateForm() {
           <MultiStepForm>
             <Step
               isNextDisabled={() =>
-                isStepValid(form, ["name", "against-name", "topic"])
+                isStepValid(form, ["name", "against-name", "topic"]) ||
+                creditsLeft === 0
+              }
+              errorMessage={
+                creditsLeft === 0
+                  ? ERROR_MESSAGES_HEBREW[ERROR_MESSAGES.INSUFFICIENT_CREDITS]
+                  : undefined
               }
             >
               <FormField
