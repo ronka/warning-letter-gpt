@@ -6,40 +6,64 @@ import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { usePathname } from "next/navigation";
 
-const NavItems = ({ onClick }: { onClick?: () => void }) => (
-  <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 gap-4 items-center p-4 md:p-0">
-    <li>
-      <Link href="/letter" className="hover:underline" onClick={onClick}>
-        צור מכתב
-      </Link>
-    </li>
-    <li>
-      <Link href="/letters" className="hover:underline" onClick={onClick}>
-        המכתבים שיצרת
-      </Link>
-    </li>
-    <li>
-      <Link href="/credits" className="hover:underline" onClick={onClick}>
-        רכישת קרדיטים
-      </Link>
-    </li>
-    <li>
-      <SignedOut>
-        <Link href="/sign-in" className="hover:underline" onClick={onClick}>
-          התחברות
-        </Link>
-      </SignedOut>
-      <SignedIn>
-        <SignOutButton>
-          <button className="hover:underline" onClick={onClick}>
-            התנתקות
-          </button>
-        </SignOutButton>
-      </SignedIn>
-    </li>
-  </ul>
-);
+interface NavLinkProps {
+  href: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+const NavLink = ({ href, onClick, children }: NavLinkProps) => {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      className={`hover:underline ${isActive ? "font-bold underline" : ""}`}
+      onClick={onClick}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const NavItems = ({ onClick }: { onClick?: () => void }) => {
+  return (
+    <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 gap-4 items-center p-4 md:p-0">
+      <li>
+        <NavLink href="/letter" onClick={onClick}>
+          צור מכתב
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/letters" onClick={onClick}>
+          המכתבים שיצרת
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/credits" onClick={onClick}>
+          קרדיטים
+        </NavLink>
+      </li>
+      <li>
+        <SignedOut>
+          <NavLink href="/sign-in" onClick={onClick}>
+            התחברות ↗
+          </NavLink>
+        </SignedOut>
+        <SignedIn>
+          <SignOutButton>
+            <button className="hover:underline" onClick={onClick}>
+              התנתקות ↗
+            </button>
+          </SignOutButton>
+        </SignedIn>
+      </li>
+    </ul>
+  );
+};
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
