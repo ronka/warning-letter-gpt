@@ -1,12 +1,13 @@
 "use client";
 
-import { SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 interface NavLinkProps {
   href: string;
@@ -42,25 +43,22 @@ const NavItems = ({ onClick }: { onClick?: () => void }) => {
           המכתבים שיצרת
         </NavLink>
       </li>
-      <li>
-        <NavLink href="/credits" onClick={onClick}>
-          קרדיטים
-        </NavLink>
-      </li>
-      <li>
-        <SignedOut>
-          <NavLink href="/sign-in" onClick={onClick}>
-            התחברות ↗
+      <SignedIn>
+        <li>
+          <NavLink href="/credits" onClick={onClick}>
+            דאשבורד
           </NavLink>
-        </SignedOut>
-        <SignedIn>
-          <SignOutButton>
-            <button className="hover:underline" onClick={onClick}>
-              התנתקות ↗
-            </button>
-          </SignOutButton>
-        </SignedIn>
-      </li>
+        </li>
+      </SignedIn>
+      <SignedOut>
+        <li>
+          <NavLink href="/sign-in" onClick={onClick}>
+            <Button variant="secondary" className="text-primary">
+              התחברות ↗
+            </Button>
+          </NavLink>
+        </li>
+      </SignedOut>
     </ul>
   );
 };

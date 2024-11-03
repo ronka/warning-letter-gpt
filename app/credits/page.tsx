@@ -1,9 +1,10 @@
 "use client";
 
 import { PricingTable } from "@/components/pricing-table/table";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCredits } from "@/context/Credits";
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
 
 export default function CreditsPage() {
   const { data: credits, isLoading } = useCredits();
@@ -11,7 +12,7 @@ export default function CreditsPage() {
   return (
     <div className="gap-4">
       <SignedIn>
-        <Card>
+        <Card className="mt-12 max-w-xs mx-auto">
           <CardContent className="pt-6">
             <div className="text-center space-y-2">
               <h2 className="text-3xl font-bold">
@@ -25,6 +26,14 @@ export default function CreditsPage() {
       <div className="flex justify-center items-center py-12 bg-background">
         <PricingTable />
       </div>
+
+      <SignedIn>
+        <div className="mt-12 flex justify-center">
+          <SignOutButton>
+            <Button variant="destructive">התנתקות ↗</Button>
+          </SignOutButton>
+        </div>
+      </SignedIn>
     </div>
   );
 }
