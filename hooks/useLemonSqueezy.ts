@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useLemonSqueezy() {
   const [isCheckoutReady, setIsCheckoutReady] = useState(false);
@@ -8,9 +8,10 @@ export function useLemonSqueezy() {
 
     function checkLemonSqueezy() {
       // @ts-ignore lemon squeezy is defined in the global scope
-      if (typeof window.createLemonSqueezy === "function") {
-        // @ts-ignore lemon squeezy is defined in the global scope
-        window.createLemonSqueezy();
+      const createLemonSqueezy = window.createLemonSqueezy;
+
+      if (typeof createLemonSqueezy === "function") {
+        createLemonSqueezy();
         setIsCheckoutReady(true);
       } else {
         timeoutId = setTimeout(checkLemonSqueezy, 100);
@@ -25,6 +26,23 @@ export function useLemonSqueezy() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!isCheckoutReady) return;
+
+    // @ts-ignore lemon squeezy is defined in the global scope
+    const lemonSqueezy = window.LemonSqueezy;
+
+    if (lemonSqueezy) {
+      lemonSqueezy.Setup({
+        eventHandler: ({ event }: any) => {
+          if (event === "Checkout.Success") {
+            window.location.reload();
+          }
+        },
+      });
+    }
+  }, [isCheckoutReady]);
 
   return isCheckoutReady;
 }
