@@ -43,6 +43,11 @@ const NavItems = ({ onClick }: { onClick?: () => void }) => {
           המכתבים שיצרת
         </NavLink>
       </li>
+      <li>
+        <NavLink href="/help" onClick={onClick}>
+          עזרה
+        </NavLink>
+      </li>
       <SignedIn>
         <li>
           <NavLink href="/credits" onClick={onClick}>
