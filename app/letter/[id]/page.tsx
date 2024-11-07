@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import LetterSkeleton from "@/components/LetterSkeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { WarningLetter } from "@/components/letter/WarningLetter";
+import { Letter } from "@/types/Letter";
+import { useToast } from "@/hooks/use-toast";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 export default function LetterDetailPage({
@@ -27,6 +29,7 @@ export default function LetterDetailPage({
   const { mutate: updateLetter, isPending: isUpdating } = useUpdateLetter(id);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
+  const { toast } = useToast();
 
   if (isError) {
     console.error(error);
@@ -47,15 +50,32 @@ export default function LetterDetailPage({
   const handleSaveClick = async () => {
     if (!data) return;
 
+    const updatePayload: Partial<Letter> = {
+      id: data.id,
+      title: data.title,
+      initialDate: data.initialDate,
+      recipientName: data.recipientName,
+      senderName: data.senderName,
+      letterContent: editedContent,
+      user_id: data.user_id,
+      createdAt: data.createdAt,
+      updatedAt: new Date(),
+    };
+
     try {
-      await updateLetter({
-        ...data,
-        letterContent: editedContent,
-      });
+      await updateLetter(updatePayload);
       setIsEditing(false);
+      toast({
+        title: "נשמר בהצלחה",
+        description: "המכתב עודכן בהצלחה",
+      });
     } catch (error) {
       console.error("Failed to save changes:", error);
-      // Implement error handling (e.g., show an error toast)
+      toast({
+        variant: "destructive",
+        title: "שגיאה בשמירה",
+        description: "לא הצלחנו לשמור את השינויים. אנא נסה שוב.",
+      });
     }
   };
 

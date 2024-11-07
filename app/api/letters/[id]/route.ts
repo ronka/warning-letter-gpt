@@ -41,18 +41,25 @@ export async function GET(
   }
 }
 
-export async function PUT(req: NextRequest) {
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const { userId } = auth();
-
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
-    const { id, to, title, body: letterBody } = body;
+    const letter = await request.json();
 
-    if (!id || !to || !title || !letterBody) {
+    // Validate required fields
+    if (
+      !letter.letterContent ||
+      !letter.title ||
+      !letter.recipientName ||
+      !letter.senderName
+    ) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -62,24 +69,18 @@ export async function PUT(req: NextRequest) {
     const updatedLetter = await db
       .update(letters)
       .set({
-        recipientName: to,
-        title,
-        letterContent: letterBody,
+        letterContent: letter.letterContent,
         updatedAt: new Date(),
       })
-      .where(and(eq(letters.id, id), eq(letters.user_id, userId)))
+      .where(and(eq(letters.id, letter.id), eq(letters.user_id, userId)))
       .returning();
-
-    if (updatedLetter.length === 0) {
-      return NextResponse.json(
-        { error: "Letter not found or unauthorized" },
-        { status: 404 }
-      );
-    }
 
     return NextResponse.json(updatedLetter[0]);
   } catch (error) {
     console.error("Error updating letter:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to update letter" },
+      { status: 500 }
+    );
   }
 }
