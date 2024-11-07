@@ -17,6 +17,8 @@ import { WarningLetter } from "@/components/letter/WarningLetter";
 import { Letter } from "@/types/Letter";
 import { useToast } from "@/hooks/use-toast";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
+import { pdf } from "@react-pdf/renderer";
+import { LetterPDF } from "@/components/letter/LetterPDF";
 
 export default function LetterDetailPage({
   params,
@@ -37,8 +39,39 @@ export default function LetterDetailPage({
     return null;
   }
 
-  const handleDownload = () => {
-    // Implement download functionality here
+  const handleDownload = async () => {
+    if (!data) return;
+
+    try {
+      // Generate PDF blob
+      const blob = await pdf(<LetterPDF letter={data} />).toBlob();
+
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${data.title || "warning-letter"}.pdf`;
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "הורדה הצליחה",
+        description: "המכתב הורד בהצלחה",
+      });
+    } catch (error) {
+      console.error("Failed to download PDF:", error);
+      toast({
+        variant: "destructive",
+        title: "שגיאה בהורדה",
+        description: "לא הצלחנו להוריד את המכתב. אנא נסה שוב.",
+      });
+    }
   };
 
   const handleEditClick = () => {
