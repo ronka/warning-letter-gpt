@@ -19,7 +19,7 @@ export const formatRTLText = (text: string): string => {
         // Remove the punctuation from the end
         formattedLine = formattedLine.slice(0, -1);
         // Add it to the beginning with a space
-        formattedLine = `${lastChar}${formattedLine}`;
+        formattedLine = `${formattedLine}`;
       }
 
       return formattedLine;
