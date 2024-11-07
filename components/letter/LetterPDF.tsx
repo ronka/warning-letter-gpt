@@ -73,9 +73,7 @@ export const LetterPDF = ({ letter }: LetterPDFProps) => (
 
       <Text style={styles.subject}>הנדון: {letter.title}</Text>
 
-      <View style={styles.content}>
-        <Text>{formatRTLText(letter.letterContent)}</Text>
-      </View>
+      <View style={styles.content}>{formatRTLText(letter.letterContent)}</View>
 
       <View style={styles.signature}>
         <Text>,בכבוד רב ובברכה</Text>
