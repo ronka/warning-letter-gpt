@@ -7,6 +7,7 @@ import {
   View,
   Font,
 } from "@react-pdf/renderer";
+import { formatRTLText } from "@/utils/rtlTextFormatter";
 
 Font.register({
   family: "Rubik",
@@ -73,7 +74,7 @@ export const LetterPDF = ({ letter }: LetterPDFProps) => (
       <Text style={styles.subject}>הנדון: {letter.title}</Text>
 
       <View style={styles.content}>
-        <Text>{letter.letterContent}</Text>
+        <Text>{formatRTLText(letter.letterContent)}</Text>
       </View>
 
       <View style={styles.signature}>
@@ -83,24 +84,3 @@ export const LetterPDF = ({ letter }: LetterPDFProps) => (
     </Page>
   </Document>
 );
-
-// interface LetterPDFProps {
-//   letter: Letter;
-// }
-
-// export const LetterPDF = ({ letter }: LetterPDFProps) => (
-//   <Document>
-//     <Page size="A4" style={styles.page}>
-//       <View style={styles.header}>
-//         <Text style={styles.title}>{letter.title}</Text>
-//         <Text style={styles.date}>{letter.initialDate}</Text>
-//       </View>
-//       <Text style={styles.recipient}>לכבוד: {letter.recipientName}</Text>
-//       <Text style={styles.content}>{letter.letterContent}</Text>
-//       <Text style={styles.sender}>
-//         בברכה,{"\n"}
-//         {letter.senderName}
-//       </Text>
-//     </Page>
-//   </Document>
-// );
