@@ -12,9 +12,9 @@ import {
 import { useLetterQuery, useUpdateLetter } from "@/context/Letter";
 import { useRouter } from "next/navigation";
 import LetterSkeleton from "@/components/LetterSkeleton";
-import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import { WarningLetter } from "@/components/letter/WarningLetter";
+import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 export default function LetterDetailPage({
   params,
@@ -41,15 +41,17 @@ export default function LetterDetailPage({
   const handleEditClick = () => {
     if (!data) return;
     setIsEditing(true);
-    setEditedContent(JSON.stringify(data, null, 2));
+    setEditedContent(data.letterContent);
   };
 
   const handleSaveClick = async () => {
     if (!data) return;
 
     try {
-      const updatedData = JSON.parse(editedContent);
-      await updateLetter(updatedData);
+      await updateLetter({
+        ...data,
+        letterContent: editedContent,
+      });
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to save changes:", error);
@@ -59,7 +61,7 @@ export default function LetterDetailPage({
 
   return (
     <section className="py-12">
-      <Card className="w-full  mx-auto">
+      <Card className="w-full mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">מכתב ההתראה שלך</CardTitle>
         </CardHeader>
@@ -72,11 +74,25 @@ export default function LetterDetailPage({
               <LetterSkeleton />
             </div>
           ) : isEditing ? (
-            <Textarea
-              value={editedContent}
-              onChange={(e) => setEditedContent(e.target.value)}
-              className="w-full h-[400px] p-6 text-lg leading-relaxed"
-            />
+            <div className="space-y-4">
+              <div className="font-semibold">{data?.title}</div>
+              <div className="text-sm text-muted-foreground">
+                {data?.initialDate}
+              </div>
+              <div className="font-semibold">לכבוד: {data?.recipientName}</div>
+              <AutoResizeTextarea
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                className="w-full p-4 text-lg leading-relaxed"
+                placeholder="תוכן המכתב..."
+                dir="rtl"
+              />
+              <div className="font-semibold mt-4">
+                בברכה,
+                <br />
+                {data?.senderName}
+              </div>
+            </div>
           ) : data ? (
             <WarningLetter
               title={data.title}
