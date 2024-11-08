@@ -83,7 +83,6 @@ export async function POST(req: NextRequest) {
 		Refer to the <the-law> section when generating the letter, DONT refer if you dont find it in the law.
 		use the <warning-letter-examples> section as a guide for the letter, but dont copy it exactly.
 
-		the letterContent should include ONLY the body of the letter, without the title, the footer and the signature.
 		
 		<the-law>
 		   ${TopicToDesciption[topic].law}
@@ -115,6 +114,8 @@ export async function POST(req: NextRequest) {
 		You are a professional and you know how to write a warning letter, but the letter should sound like it was written by the client.
 		Refer to law only from what i provide you.
 		Dont put placeholders, if you dont have the data don't write it.
+		the letter content should include ONLY the body of the letter, without the title, the footer and the signature.(dont include "בברכה רבה" or "בברכה רבה לך" or "בברכה רבה לך ולעסקך" or any other signature)
+
 		
 		everything you output MUST be in hebrew`,
       messages,
