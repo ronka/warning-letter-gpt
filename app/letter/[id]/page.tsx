@@ -17,6 +17,7 @@ import {
   downloadLetterAsPDF,
   createLetterUpdatePayload,
 } from "@/utils/letterUtils";
+import { createPortal } from "react-dom";
 
 export default function LetterDetailPage({
   params,
@@ -30,6 +31,7 @@ export default function LetterDetailPage({
   const { mutate: updateLetter, isPending: isUpdating } = useUpdateLetter(id);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
+  const [isPrinting, setIsPrinting] = useState(false);
 
   if (isError) {
     console.error(error);
@@ -86,33 +88,57 @@ export default function LetterDetailPage({
     setEditedContent("");
   };
 
+  const handlePrint = () => {
+    setIsPrinting(true);
+    setTimeout(() => {
+      window.print();
+      setIsPrinting(false);
+    }, 100);
+  };
+
   return (
-    <section className="py-12">
-      <Card className="w-full mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">מכתב ההתראה שלך</CardTitle>
-        </CardHeader>
-        <CardContent className="prose dark:prose-invert max-w-none">
-          <LetterViewer
-            isLoading={isLoading}
-            isEditing={isEditing}
-            data={data}
-            editedContent={editedContent}
-            onEditContentChange={(content) => setEditedContent(content)}
-          />
-        </CardContent>
-        <CardFooter className="flex justify-center gap-4">
-          <LetterActions
-            isEditing={isEditing}
-            isLoading={isLoading}
-            isUpdating={isUpdating}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            onEdit={handleEdit}
-            onDownload={handleDownload}
-          />
-        </CardFooter>
-      </Card>
-    </section>
+    <>
+      <section className="py-12 print-hide">
+        <Card className="w-full mx-auto">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">
+              מכתב ההתראה שלך
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="prose dark:prose-invert max-w-none">
+            <LetterViewer
+              isLoading={isLoading}
+              isEditing={isEditing}
+              data={data}
+              editedContent={editedContent}
+              onEditContentChange={(content) => setEditedContent(content)}
+            />
+          </CardContent>
+          <CardFooter className="flex justify-center gap-4">
+            <LetterActions
+              isEditing={isEditing}
+              isLoading={isLoading}
+              isUpdating={isUpdating}
+              onSave={handleSave}
+              onCancel={handleCancel}
+              onEdit={handleEdit}
+              onDownload={handleDownload}
+              onPrint={handlePrint}
+            />
+          </CardFooter>
+        </Card>
+      </section>
+
+      <div className="print-only">
+        <LetterViewer
+          isLoading={false}
+          isEditing={false}
+          data={data}
+          editedContent=""
+          onEditContentChange={() => {}}
+          printMode
+        />
+      </div>
+    </>
   );
 }

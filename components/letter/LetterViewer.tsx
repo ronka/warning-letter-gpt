@@ -9,6 +9,7 @@ interface LetterViewerProps {
   data: Letter | undefined;
   editedContent: string;
   onEditContentChange: (content: string) => void;
+  printMode?: boolean;
 }
 
 export function LetterViewer({
@@ -17,6 +18,7 @@ export function LetterViewer({
   data,
   editedContent,
   onEditContentChange,
+  printMode,
 }: LetterViewerProps) {
   if (isLoading) {
     return (
@@ -59,6 +61,7 @@ export function LetterViewer({
       recipient={{ name: data.recipientName }}
       letterContent={data.letterContent}
       sender={{ name: data.senderName }}
+      printMode={printMode}
     />
   );
 }

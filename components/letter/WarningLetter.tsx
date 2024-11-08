@@ -8,6 +8,7 @@ interface WarningLetterProps {
   sender: {
     name: string;
   };
+  printMode?: boolean;
 }
 
 function WarningLetter({
@@ -16,13 +17,20 @@ function WarningLetter({
   letterContent,
   sender,
   title,
+  printMode,
 }: WarningLetterProps) {
   const contentLines = letterContent.split("\n");
 
   return (
-    <div className="bg-muted flex items-center justify-center p-2 md:p-4">
+    <div
+      className={
+        !printMode ? "bg-muted flex items-center justify-center p-2 md:p-4" : ""
+      }
+    >
       <div
-        className="bg-white p-4 md:p-8 rounded-lg shadow-lg max-w-2xl w-full"
+        className={`bg-white p-4 md:p-8 ${
+          printMode ? "print-only" : "rounded-lg shadow-lg max-w-2xl w-full"
+        }`}
         dir="rtl"
       >
         <div className="text-right mb-4">

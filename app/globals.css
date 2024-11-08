@@ -71,3 +71,29 @@
       @apply bg-background text-foreground;
     }
   }
+
+  @media print {
+
+    .print-only {
+        display: initial !important;
+    }
+
+    .print-hide {
+        display: none !important;
+      
+    }
+
+    .print-show {
+      display: block !important;
+    }
+
+    @page {
+      margin: 2cm;
+      size: A4;
+    }
+
+  }
+
+  .print-only {
+    display: none;
+  }

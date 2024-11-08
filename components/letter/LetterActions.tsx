@@ -9,6 +9,7 @@ interface LetterActionsProps {
   onCancel: () => void;
   onEdit: () => void;
   onDownload: () => void;
+  onPrint: () => void;
 }
 
 export function LetterActions({
@@ -19,6 +20,7 @@ export function LetterActions({
   onCancel,
   onEdit,
   onDownload,
+  onPrint,
 }: LetterActionsProps) {
   if (isEditing) {
     return (
@@ -27,7 +29,7 @@ export function LetterActions({
           💾 {isUpdating ? <Spinner /> : "שמור"}
         </Button>
         <Button variant="outline" onClick={onCancel} disabled={isLoading}>
-          ❌ ביטול
+          🚫 ביטול
         </Button>
       </>
     );
@@ -38,8 +40,11 @@ export function LetterActions({
       <Button variant="outline" onClick={onEdit} disabled={isLoading}>
         🖊️ עריכה
       </Button>
-      <Button onClick={onDownload} disabled={isLoading}>
-        ↓ {isLoading ? "טוען..." : "להורדה"}
+      <Button variant="outline" onClick={onDownload} disabled={isLoading}>
+        📃 הורד PDF
+      </Button>
+      <Button variant="outline" onClick={onPrint} disabled={isLoading}>
+        🖨️ הדפס
       </Button>
     </>
   );
