@@ -40,14 +40,14 @@ export function LetterActions({
       <Button variant="outline" onClick={onEdit} disabled={isLoading}>
         🖊️ עריכה
       </Button>
-      <Button
+      {/* <Button
         variant="outline"
         onClick={onDownload}
         disabled={isLoading}
         className="hidden md:inline-flex"
       >
         📃 הורד PDF
-      </Button>
+      </Button> */}
       <Button variant="outline" onClick={onPrint} disabled={isLoading}>
         🖨️ הדפס
       </Button>
