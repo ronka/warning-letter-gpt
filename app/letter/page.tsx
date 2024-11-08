@@ -25,7 +25,7 @@ export default function Letters() {
           </h3>
         </div>
 
-        {creditsLeft === 0 && (
+        {creditsLeft === 0 && !isLoading && (
           <Card className="max-w-xs mx-auto">
             <CardContent className="pt-6">
               <div className="text-center gap-4 flex flex-col">
@@ -33,7 +33,9 @@ export default function Letters() {
                   {ERROR_MESSAGES_HEBREW[ERROR_MESSAGES.INSUFFICIENT_CREDITS]}
                 </p>
                 <Link href="/credits">
-                  <Button>לקניית קרדיטים</Button>
+                  <Button className="text-lg px-8 py-6 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl bg-primary">
+                    לקניית קרדיטים
+                  </Button>
                 </Link>
               </div>
             </CardContent>
