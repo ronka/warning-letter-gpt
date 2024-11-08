@@ -29,7 +29,13 @@ const BuyButton = ({ productType }: BuyButtonProps) => {
           "pointer-events-none": disabled,
         })}
       >
-        <Button disabled={disabled}>קנה קרדיטים</Button>
+        {" "}
+        <Button
+          className="text-lg px-8 py-6 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl bg-primary"
+          disabled={disabled}
+        >
+          קנה קרדיטים
+        </Button>
       </Link>
       <Script src="https://app.lemonsqueezy.com/js/lemon.js" defer />
     </>

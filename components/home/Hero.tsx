@@ -11,7 +11,10 @@ const Hero = () => {
           בו לייצר מכתב התראה מהיר וקל לכל שם ומטרה שתרצה
         </p>
         <Link href={"/letter"}>
-          <Button>צור מכתב התראה ✉️</Button>
+          <Button className="text-lg px-8 py-6 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl bg-primary">
+            <span className="ml-2 text-2xl">✉️</span>
+            צור מכתב התראה
+          </Button>
         </Link>
       </div>
     </section>
