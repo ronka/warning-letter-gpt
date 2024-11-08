@@ -51,7 +51,7 @@ const NavItems = ({ onClick }: { onClick?: () => void }) => {
       <SignedIn>
         <li>
           <NavLink href="/credits" onClick={onClick}>
-            דאשבורד
+            קרדיטים
           </NavLink>
         </li>
       </SignedIn>
