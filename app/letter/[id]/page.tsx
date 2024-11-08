@@ -112,6 +112,11 @@ export default function LetterDetailPage({
     }
   };
 
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedContent(""); // Clear the edited content
+  };
+
   return (
     <section className="py-12">
       <Card className="w-full mx-auto">
@@ -158,12 +163,21 @@ export default function LetterDetailPage({
         </CardContent>
         <CardFooter className="flex justify-center gap-4">
           {isEditing ? (
-            <Button
-              onClick={handleSaveClick}
-              disabled={isLoading || isUpdating}
-            >
-              💾 {isUpdating ? <Spinner /> : "שמור"}
-            </Button>
+            <>
+              <Button
+                onClick={handleSaveClick}
+                disabled={isLoading || isUpdating}
+              >
+                💾 {isUpdating ? <Spinner /> : "שמור"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleCancelEdit}
+                disabled={isLoading}
+              >
+                ❌ ביטול
+              </Button>
+            </>
           ) : (
             <Button
               variant="outline"
