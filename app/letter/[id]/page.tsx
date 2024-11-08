@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -11,14 +10,13 @@ import {
 } from "@/components/ui/card";
 import { useLetterQuery, useUpdateLetter } from "@/context/Letter";
 import { useRouter } from "next/navigation";
-import LetterSkeleton from "@/components/LetterSkeleton";
-import { Spinner } from "@/components/ui/spinner";
-import { WarningLetter } from "@/components/letter/WarningLetter";
-import { Letter } from "@/types/Letter";
 import { useToast } from "@/hooks/use-toast";
-import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
-import { pdf } from "@react-pdf/renderer";
-import { LetterPDF } from "@/components/letter/LetterPDF";
+import { LetterViewer } from "@/components/letter/LetterViewer";
+import { LetterActions } from "@/components/letter/LetterActions";
+import {
+  downloadLetterAsPDF,
+  createLetterUpdatePayload,
+} from "@/utils/letterUtils";
 
 export default function LetterDetailPage({
   params,
@@ -26,12 +24,12 @@ export default function LetterDetailPage({
   params: { id: string };
 }) {
   const router = useRouter();
+  const { toast } = useToast();
   const { id } = params;
   const { data, error, isError, isLoading } = useLetterQuery(id);
   const { mutate: updateLetter, isPending: isUpdating } = useUpdateLetter(id);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
-  const { toast } = useToast();
 
   if (isError) {
     console.error(error);
@@ -41,25 +39,8 @@ export default function LetterDetailPage({
 
   const handleDownload = async () => {
     if (!data) return;
-
     try {
-      // Generate PDF blob
-      const blob = await pdf(<LetterPDF letter={data} />).toBlob();
-
-      // Create download link
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${data.title || "warning-letter"}.pdf`;
-
-      // Trigger download
-      document.body.appendChild(link);
-      link.click();
-
-      // Cleanup
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
+      await downloadLetterAsPDF(data);
       toast({
         title: "הורדה הצליחה",
         description: "המכתב הורד בהצלחה",
@@ -74,28 +55,10 @@ export default function LetterDetailPage({
     }
   };
 
-  const handleEditClick = () => {
+  const handleSave = async () => {
     if (!data) return;
-    setIsEditing(true);
-    setEditedContent(data.letterContent);
-  };
-
-  const handleSaveClick = async () => {
-    if (!data) return;
-
-    const updatePayload: Partial<Letter> = {
-      id: data.id,
-      title: data.title,
-      initialDate: data.initialDate,
-      recipientName: data.recipientName,
-      senderName: data.senderName,
-      letterContent: editedContent,
-      user_id: data.user_id,
-      createdAt: data.createdAt,
-      updatedAt: new Date(),
-    };
-
     try {
+      const updatePayload = createLetterUpdatePayload(data, editedContent);
       await updateLetter(updatePayload);
       setIsEditing(false);
       toast({
@@ -112,9 +75,15 @@ export default function LetterDetailPage({
     }
   };
 
-  const handleCancelEdit = () => {
+  const handleEdit = () => {
+    if (!data) return;
+    setIsEditing(true);
+    setEditedContent(data.letterContent);
+  };
+
+  const handleCancel = () => {
     setIsEditing(false);
-    setEditedContent(""); // Clear the edited content
+    setEditedContent("");
   };
 
   return (
@@ -124,72 +93,24 @@ export default function LetterDetailPage({
           <CardTitle className="text-2xl font-bold">מכתב ההתראה שלך</CardTitle>
         </CardHeader>
         <CardContent className="prose dark:prose-invert max-w-none">
-          {isLoading ? (
-            <div className="flex flex-col gap-4">
-              <LetterSkeleton />
-              <LetterSkeleton />
-              <LetterSkeleton />
-              <LetterSkeleton />
-            </div>
-          ) : isEditing ? (
-            <div className="space-y-4">
-              <div className="font-semibold">{data?.title}</div>
-              <div className="text-sm text-muted-foreground">
-                {data?.initialDate}
-              </div>
-              <div className="font-semibold">לכבוד: {data?.recipientName}</div>
-              <AutoResizeTextarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="w-full p-4 text-lg leading-relaxed"
-                placeholder="תוכן המכתב..."
-                dir="rtl"
-              />
-              <div className="font-semibold mt-4">
-                בברכה,
-                <br />
-                {data?.senderName}
-              </div>
-            </div>
-          ) : data ? (
-            <WarningLetter
-              title={data.title}
-              initialDate={data.initialDate}
-              recipient={{ name: data.recipientName }}
-              letterContent={data.letterContent}
-              sender={{ name: data.senderName }}
-            />
-          ) : null}
+          <LetterViewer
+            isLoading={isLoading}
+            isEditing={isEditing}
+            data={data}
+            editedContent={editedContent}
+            onEditContentChange={(content) => setEditedContent(content)}
+          />
         </CardContent>
         <CardFooter className="flex justify-center gap-4">
-          {isEditing ? (
-            <>
-              <Button
-                onClick={handleSaveClick}
-                disabled={isLoading || isUpdating}
-              >
-                💾 {isUpdating ? <Spinner /> : "שמור"}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleCancelEdit}
-                disabled={isLoading}
-              >
-                ❌ ביטול
-              </Button>
-            </>
-          ) : (
-            <Button
-              variant="outline"
-              onClick={handleEditClick}
-              disabled={isLoading}
-            >
-              🖊️ עריכה
-            </Button>
-          )}
-          <Button onClick={handleDownload} disabled={isLoading || isEditing}>
-            ↓ {isLoading ? "טוען..." : "להורדה"}
-          </Button>
+          <LetterActions
+            isEditing={isEditing}
+            isLoading={isLoading}
+            isUpdating={isUpdating}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            onEdit={handleEdit}
+            onDownload={handleDownload}
+          />
         </CardFooter>
       </Card>
     </section>
