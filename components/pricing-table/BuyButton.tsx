@@ -19,20 +19,17 @@ const BuyButton = ({ productType }: BuyButtonProps) => {
 
   const buyLink = getProductLink(productType, userId);
 
-  const disabled = !userId || !isCheckoutReady;
-
   return (
     <>
       <Link
         href={buyLink}
         className={cn("lemonsqueezy-button", {
-          "pointer-events-none": disabled,
+          "pointer-events-none": !isCheckoutReady,
         })}
       >
-        {" "}
         <Button
           className="text-lg px-8 py-6 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl bg-primary"
-          disabled={disabled}
+          disabled={!isCheckoutReady}
         >
           קנה קרדיטים
         </Button>
