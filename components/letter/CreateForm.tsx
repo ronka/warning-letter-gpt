@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TOPIC_TO_HEBREW, Topic } from "@/types/Topic";
+import { TOPIC_TO_HEBREW, TOPIC_TO_REFERENCE, Topic } from "@/types/Topic";
 import { useState } from "react";
 import { MultiStepForm, Required } from "@/components/layout/MultiStepForm";
 import { Step } from "@/components/layout/Step";
@@ -36,6 +36,7 @@ import { SubmitButton } from "@/components/letter/SubmitButton";
 import { ERROR_MESSAGES, ERROR_MESSAGES_HEBREW } from "@/constants/errors";
 import { AxiosError } from "axios";
 import { useCredits } from "@/context/Credits";
+import { ExternalLink } from "lucide-react";
 
 type ApiErrorResponse = {
   error: string;
@@ -158,6 +159,21 @@ export function CreateForm() {
                         </SelectItem>
                       </SelectContent>
                     </Select>
+                    {field.value && (
+                      <FormDescription className="flex items-center gap-1 text-xs">
+                        למידע נוסף על{" "}
+                        <a
+                          href={TOPIC_TO_REFERENCE[field.value as Topic]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-700 underline inline-flex items-center gap-0.5"
+                        >
+                          {TOPIC_TO_HEBREW[field.value as Topic]}
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                        דרך אתר כל זכות
+                      </FormDescription>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
