@@ -10,8 +10,8 @@ import { heIL } from "@clerk/localizations";
 const inter = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "התראהGPT",
-  description: "בו לייצר מכתב התראה מהיר וקל לכל שם ומטרה שתרצה",
+  title: "WarningGPT",
+  description: "לייצר מכתב התראה במהירות ובקלולת בעשירית מהמחיר לכל מטרה שתרצו",
 };
 
 export default function RootLayout({

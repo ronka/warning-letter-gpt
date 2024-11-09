@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <main className="flex-grow">
       <Hero />
-      <ExplainationSection />
       <PromoSection />
+      <ExplainationSection />
       <PricingTable />
       <FaqSection />
     </main>

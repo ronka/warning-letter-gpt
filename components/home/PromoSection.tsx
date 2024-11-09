@@ -8,15 +8,6 @@ export function PromoSection() {
     <section className="py-20 bg-gradient-to-br ">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="w-full md:w-1/2">
-            <Image
-              src={imageSrc}
-              width={600}
-              height={400}
-              alt="Promotional image"
-            />
-          </div>
-
           <div className="w-full md:w-1/2 space-y-4 bg-white rounded-2xl shadow-xl p-8">
             <h2 className="text-3xl font-bold text-gray-800">
               צור מכתב אזהרה משפטי תוך דקות –{" "}
@@ -38,6 +29,15 @@ export function PromoSection() {
                 <Button>צור מכתב התראה ✉️</Button>
               </Link>
             </div>
+          </div>
+
+          <div className="w-full md:w-1/2">
+            <Image
+              src={imageSrc}
+              width={600}
+              height={400}
+              alt="Promotional image"
+            />
           </div>
         </div>
       </div>

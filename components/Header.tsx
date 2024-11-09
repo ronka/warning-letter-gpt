@@ -75,7 +75,7 @@ const Header = () => {
     <header className="bg-primary text-primary-foreground print-hide">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold">
-          התראהGPT
+          📨 WarningGPT
         </Link>
         <nav className="hidden md:flex">
           <NavItems />
