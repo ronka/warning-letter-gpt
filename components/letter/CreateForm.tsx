@@ -228,7 +228,24 @@ export function CreateForm() {
                         מה התלונה?
                       </FormLabel>
                       <FormDescription>
-                        תשתדלו להיות כמה שיותר מפורטים במקרה האירוע
+                        <div>תשתדלו להיות כמה שיותר מפורטים במקרה האירוע</div>
+                        <div>
+                          למידע נוסף על{" "}
+                          <a
+                            href={
+                              TOPIC_TO_REFERENCE[
+                                form.getValues().topic as Topic
+                              ]
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-700 underline inline-flex items-center gap-0.5"
+                          >
+                            {TOPIC_TO_HEBREW[form.getValues().topic as Topic]}
+                            <ExternalLink className="h-3 w-3" />
+                          </a>{" "}
+                          דרך אתר כל זכות
+                        </div>
                       </FormDescription>
                     </div>
                     <FormControl>
