@@ -109,13 +109,14 @@ export async function POST(req: NextRequest) {
 
     const { object } = await generateObject({
       model: openai("gpt-4o"),
+      maxRetries: 10,
       schema: LetterOuputSchema,
       system: `You are an attorney and you help your client to write a warning letter to do what ever the client request you to do.
 		You are a professional and you know how to write a warning letter, but the letter should sound like it was written by the client.
 		Refer to law only from what i provide you.
+		Write the letter in the style of a lawyer, quote from the "the-law" section i provide you.
 		Dont put placeholders, if you dont have the data don't write it.
-		the letter content should include ONLY the body of the letter, without the title, the footer and the signature.(dont include "בברכה רבה" or "בברכה רבה לך" or "בברכה רבה לך ולעסקך" or any other signature)
-
+		the letter content should include ONLY the body of the letter, without the title, the footer and the signature.(dont include "בברכה רבה" or "בכבוד רב" or "בברכה רבה לך" or "בברכה רבה לך ולעסקך" or any other)
 		
 		everything you output MUST be in hebrew`,
       messages,
