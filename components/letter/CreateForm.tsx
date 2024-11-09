@@ -153,6 +153,9 @@ export function CreateForm() {
                         <SelectItem value={Topic.FAKE_NEWS}>
                           {TOPIC_TO_HEBREW[Topic.FAKE_NEWS]}
                         </SelectItem>
+                        <SelectItem value={Topic.COPYRIGHT}>
+                          {TOPIC_TO_HEBREW[Topic.COPYRIGHT]}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
