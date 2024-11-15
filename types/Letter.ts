@@ -1,14 +1,9 @@
 import * as z from "zod";
-import { letters } from "../db/schema";
 
 // Zod schema for letter input validation
 export const LetterOuputSchema = z.object({
   title: z.string().describe("The title of the letter"),
-  letterContent: z
-    .string()
-    .describe(
-      "The letter content. include ONLY the body of the letter, without the title, the footer and the signature"
-    ),
+  letterContent: z.string().describe("The warning letter content"),
 });
 
 // Zod schema for letter input validation
