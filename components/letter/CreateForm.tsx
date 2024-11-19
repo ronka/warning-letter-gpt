@@ -122,6 +122,8 @@ export function CreateForm() {
     }
   };
 
+  const isTermsAccepted = form.watch("acceptTerms");
+
   return (
     <div className="max-w-[620px] w-full mx-auto">
       <Form {...form}>
@@ -377,7 +379,7 @@ export function CreateForm() {
                     isLoading={isLoading}
                     isError={isError}
                     isSuccess={isSuccess}
-                    disabled={!form.getValues().acceptTerms}
+                    disabled={!isTermsAccepted}
                   />
 
                   {(isError || serverError) && (
