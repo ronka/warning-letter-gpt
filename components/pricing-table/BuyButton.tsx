@@ -7,12 +7,15 @@ import Script from "next/script";
 import { useLemonSqueezy } from "@/hooks/useLemonSqueezy";
 import { getProductLink, ProductType } from "@/utils/productLinks";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type BuyButtonProps = {
   productType: ProductType;
 };
 
 const BuyButton = ({ productType }: BuyButtonProps) => {
+  const router = useRouter();
+
   const { user } = useUser();
   const userId = user?.id;
   const isCheckoutReady = useLemonSqueezy();
@@ -23,6 +26,11 @@ const BuyButton = ({ productType }: BuyButtonProps) => {
     <>
       <Link
         href={buyLink}
+        onClick={() => {
+          if (!userId) {
+            router.push("/sign-in");
+          }
+        }}
         className={cn("lemonsqueezy-button", {
           "pointer-events-none": !isCheckoutReady,
         })}
