@@ -25,7 +25,7 @@ const parseFormData = (formData: globalThis.FormData): FormData => {
     } else {
       const parsedKey = key as keyof FormData;
 
-      data[parsedKey] = value;
+      data[parsedKey] = value as never;
     }
   });
 

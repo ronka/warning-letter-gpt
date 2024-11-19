@@ -82,6 +82,7 @@ export function CreateForm() {
       body: "",
       purpose: "",
       name: "",
+      acceptTerms: false,
     },
   });
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
