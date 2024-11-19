@@ -17,7 +17,7 @@ import {
   downloadLetterAsPDF,
   createLetterUpdatePayload,
 } from "@/utils/letterUtils";
-import { createPortal } from "react-dom";
+import { Disclaimer } from "@/components/letter/Disclaimer";
 
 export default function LetterDetailPage({
   params,
@@ -97,7 +97,7 @@ export default function LetterDetailPage({
   };
 
   return (
-    <>
+    <div className="container mx-auto py-6">
       <section className="py-12 print-hide">
         <Card className="w-full mx-auto">
           <CardHeader>
@@ -126,6 +126,10 @@ export default function LetterDetailPage({
               onPrint={handlePrint}
             />
           </CardFooter>
+
+          <div className="p-4">
+            <Disclaimer />
+          </div>
         </Card>
       </section>
 
@@ -139,6 +143,6 @@ export default function LetterDetailPage({
           printMode
         />
       </div>
-    </>
+    </div>
   );
 }
