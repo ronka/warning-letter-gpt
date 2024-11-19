@@ -39,9 +39,6 @@ export function AsymptoticProgressBar({
   const progress = useAsymptoticProgress(isRunning);
 
   return (
-    <Progress
-      value={!forceFinish ? progress : 100}
-      className="h-1 w-full -mt-1"
-    />
+    <Progress value={!forceFinish ? progress : 100} className="h-1 w-full" />
   );
 }

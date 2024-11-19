@@ -37,6 +37,7 @@ import { ERROR_MESSAGES, ERROR_MESSAGES_HEBREW } from "@/constants/errors";
 import { AxiosError } from "axios";
 import { useCredits } from "@/context/Credits";
 import { ExternalLink } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type ApiErrorResponse = {
   error: string;
@@ -59,6 +60,9 @@ const formSchema = z.object({
   }),
   name: z.string().min(1, {
     message: "שם אמור להכיל לפחות 1 תווים",
+  }),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "עליך לאשר את תנאי השימוש כדי להמשיך",
   }),
 });
 
@@ -345,10 +349,35 @@ export function CreateForm() {
                     </div>
                   </div>
 
+                  <FormField
+                    control={form.control}
+                    name="acceptTerms"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-y-0 rounded-md border p-4 mb-4">
+                        <FormControl>
+                          <Checkbox
+                            className="ml-2"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className=" leading-none">
+                          <FormLabel>
+                            אני מבין/ה ש-WarningGPT אינה אחראית על תוכן המכתב
+                            המיוצר, כמו כן האתר לא משמש כיעוץ משפטי או תחליף לו
+                            ואני לוקח/ת אחריות מלאה על השימוש במכתב ותוכנו
+                          </FormLabel>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+
                   <SubmitButton
                     isLoading={isLoading}
                     isError={isError}
                     isSuccess={isSuccess}
+                    disabled={!form.getValues().acceptTerms}
                   />
 
                   {(isError || serverError) && (

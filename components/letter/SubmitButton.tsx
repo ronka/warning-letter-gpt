@@ -7,6 +7,7 @@ interface SubmitButtonProps {
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
+  disabled?: boolean;
   className?: string;
 }
 
@@ -14,14 +15,15 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   isLoading,
   isError,
   isSuccess,
+  disabled,
   className = "",
 }) => {
   return (
     <div>
       <Button
-        className={`w-full ${className}`}
+        className={`w-full ${className} rounded-b-none`}
         type="submit"
-        disabled={isLoading || isSuccess}
+        disabled={isLoading || isSuccess || disabled}
       >
         {isLoading ? (
           <>
