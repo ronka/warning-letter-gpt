@@ -13,9 +13,9 @@ export function getProductLink(
   productType: ProductType,
   userId: string | undefined
 ): string {
-  if (!userId) {
-    return "/sign-in";
-  }
+  //   if (!userId) {
+  //     return "/sign-in";
+  //   }
 
   const baseLink = productLinks[productType];
   if (!baseLink) {

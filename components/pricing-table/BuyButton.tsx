@@ -14,8 +14,6 @@ type BuyButtonProps = {
 };
 
 const BuyButton = ({ productType }: BuyButtonProps) => {
-  const router = useRouter();
-
   const { user } = useUser();
   const userId = user?.id;
   const isCheckoutReady = useLemonSqueezy();
@@ -28,7 +26,9 @@ const BuyButton = ({ productType }: BuyButtonProps) => {
         href={buyLink}
         onClick={() => {
           if (!userId) {
-            router.push("/sign-in");
+            window.location.href = "/sign-in";
+
+            // router.push("/sign-in");
           }
         }}
         className={cn("lemonsqueezy-button", {
