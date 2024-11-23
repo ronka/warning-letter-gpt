@@ -1,15 +1,13 @@
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { ChangingHeroText } from "./ChangingHeroText";
 
 const Hero = () => {
   return (
     <section className="bg-muted py-12 md:py-24">
       <div className="container mx-auto px-4 text-center flex flex-col md:flex-row gap-12">
-        <div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            לשון הרע? הפרת זכויות יוצרים? תגידו{" "}
-            <span className="text-primary underline">די!</span>
-          </h1>
+        <div className="flex-1">
+          <ChangingHeroText />
           <p className="text-xl mb-8">
             בואו לייצר מכתב התראה מהיר וקל לכל שם ומטרה שתרצו
           </p>
