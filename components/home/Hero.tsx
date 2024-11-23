@@ -9,7 +9,7 @@ const Hero = () => {
         <div className="flex-1">
           <ChangingHeroText />
           <p className="text-xl mb-8">
-            בואו לייצר מכתב התראה מהיר וקל לכל שם ומטרה שתרצו
+            בואו לייצר תבנית למכתב אזהרה מהיר וקל לכל שם ומטרה שתרצו באמצעות AI
           </p>
 
           <ul className="text-lg mb-8">
@@ -23,7 +23,7 @@ const Hero = () => {
           <Link href={"/letter"}>
             <Button className="text-lg px-8 py-6 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl bg-primary mb-12">
               <span className="ml-2 text-2xl">✉️</span>
-              צור מכתב התראה
+              צור מבנית למכתב אזהרה
             </Button>
           </Link>
         </div>

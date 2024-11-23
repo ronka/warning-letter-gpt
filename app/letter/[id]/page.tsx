@@ -7,6 +7,7 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
+  CardDescription,
 } from "@/components/ui/card";
 import { useLetterQuery, useUpdateLetter } from "@/context/Letter";
 import { useRouter } from "next/navigation";
@@ -102,8 +103,12 @@ export default function LetterDetailPage({
         <Card className="w-full mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">
-              מכתב ההתראה שלך
+              תבנית מכתב ההתראה שלך
             </CardTitle>
+            <CardDescription>
+              התבנית שלפניך מכילה הצעה לניסוח ראשוני למכתב ההתראה, הוסף ושנה את
+              המידע ככה שיתאים למקרה שלך
+            </CardDescription>
           </CardHeader>
           <CardContent className="prose dark:prose-invert max-w-none">
             <LetterViewer

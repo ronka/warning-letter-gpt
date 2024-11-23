@@ -20,12 +20,12 @@ export function ExplainationSection() {
 
           <div className="w-full md:w-1/2 space-y-4 bg-white rounded-2xl shadow-xl p-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              מהו מכתב אזהרה משפטי?
+              מהו מכתב התראה?
             </h2>
             <p className="text-lg text-gray-600">
-              מכתב אזהרה הוא כלי משפטי חזק שמסייע להגן על זכויותיך לפני פנייה
+              מכתב התראה הוא כלי משפטי חזק שמסייע להגן על זכויותיך לפני פנייה
               לבית המשפט. כאשר מופצים עליך או על העסק שלך שקרים, דיבה או מידע
-              פוגעני, מכתב אזהרה יכול להרתיע את הצד הפוגע ולעצור את הפגיעה.
+              פוגעני, מכתב התראה יכול להרתיע את הצד הפוגע ולעצור את הפגיעה.
             </p>
             <h3 className="text-xl font-bold text-gray-800">
               מתי כדאי להשתמש?
@@ -36,11 +36,11 @@ export function ExplainationSection() {
               <li>✅ פתרון מהיר לפני נקיטת צעדים משפטיים יקרים</li>
             </ul>
             <p className="text-gray-600 text-lg">
-              הגן על זכויותיך בקלות – מכתב אזהרה משפטי מקצועי, תוך דקות!
+              הגן על זכויותיך בקלות – תבנית מכתב התראה מקצועי, תוך דקות!
             </p>
             <div className="flex justify-center">
               <Link href={"/letter"}>
-                <Button>צור מכתב התראה ✉️</Button>
+                <Button>צור מבנית למכתב התראה ✉️</Button>
               </Link>
             </div>
           </div>
