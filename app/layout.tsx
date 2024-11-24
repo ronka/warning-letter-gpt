@@ -6,6 +6,7 @@ import { Body } from "@/components/Body";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { heIL } from "@clerk/localizations";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Open_Sans({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+            <GoogleAnalytics gaId="G-SP39XP81GC" />
           </Body>
         </body>
       </html>
