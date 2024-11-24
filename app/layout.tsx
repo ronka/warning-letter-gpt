@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { heIL } from "@clerk/localizations";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Open_Sans({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
             {children}
             <Footer />
             <GoogleAnalytics gaId="G-SP39XP81GC" />
+            <Analytics />
           </Body>
         </body>
       </html>
